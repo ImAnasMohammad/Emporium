@@ -18,11 +18,14 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { Link, NavLink } from 'react-router-dom';
+import Cart from './Cart';
 
 
 const Navbar = () => {
 
-  const [isMenuIcon,setIsMenuIcon] = useState(false)
+  const [isOpen,setIsOpen] = useState(false);
+  const [openCart,setOpenCart] = useState(false);
+
   // const [dataOnHover,setDataOnHover] = useState(false)
   const isMobileDevice = /Mobi/i.test(window.navigator.userAgent)
 
@@ -34,6 +37,7 @@ const Navbar = () => {
     setTarget(e.target)
     setShow(true)
   }
+
 
   const handleMouseOut=(e)=>{
     setShow(false)
@@ -53,133 +57,134 @@ const Navbar = () => {
     };
   }, [ref]);
 
-  return (
-    <nav className='navbar'>
-      {/* {dataOnHover &&
-            <CommonModal isOpen={dataOnHover} setIsOpen={setDataOnHover}>
-              <div className='hover_menu'>
-                <ul>
-                  <li>Hello</li>
-                </ul>
-                <ul>
-                  <li>Hai</li>
-                </ul>
-                <ul>
-                  <li>Bye</li>
-                </ul>
-              </div>
-              </CommonModal>
-            } */}
-      <Link>
-        <div className='logo'>
-            <img src={logo} alt='Internal Server Error...' />
-            <div className='logo_txt'>
-              <h3>SV</h3>
-              <span>EMPORIUM</span>
-            </div>
 
-        </div>
-      
-      </Link>
-      <div className={`${isMenuIcon ?'nav_items': 'nav_items active'}`}>
-        <ul>
-          <li>
-            <NavLink activeClassName='active' to='/'>Home</NavLink>
-          </li>
-          <li>
-            <NavLink activeClassName='active' to='/categories'>Categories</NavLink>
-          </li>
-          <li className='overlay_parent'>
-            {isMobileDevice ? 
-              <Accordion>
-              <Accordion.Item eventKey="0">
-              <Accordion.Header>Products</Accordion.Header> 
-              <Accordion.Body>
-                <ul>
-                  <li>
-                    Hello
-                  </li>
-                  <li>
-                    Hai
-                  </li>
-                  <li>
-                    Hello
-                  </li>
-                </ul>
-              </Accordion.Body>
-              </Accordion.Item>
-              </Accordion>
-              :
-            <Link to='/'
-            onMouseOver={(e)=>handleMouseOver(e)}
-            // onMouseOut={(e)=>handleMouseOut(e)}
-            >Products</Link>}
-            {show &&
-            <div ref={ref} className='overlay_items'>      
-            <Overlay
-              show={show}
-              target={target}
-              placement="bottom"
-              container={ref}
-              containerPadding={20}
-              
-            >
-              <Popover id="popover-contained">
-                <Popover.Body>
+  return (
+    <>
+      <Cart openCart={openCart} setOpenCart={setOpenCart}/>
+      <nav className='navbar'>
+        <div onClick={()=>setIsOpen(prev=>!prev)}className={`nav-shadow-wrapper ${isOpen ? 'active' :''}`}></div>
+        {/* {dataOnHover &&
+              <CommonModal isOpen={dataOnHover} setIsOpen={setDataOnHover}>
                 <div className='hover_menu'>
-                  <div>
-                <ul>
-                  <li>Hello</li>
-                  <li>Hai</li>
-                  <li>Bye</li>
-                </ul>
+                  <ul>
+                    <li>Hello</li>
+                  </ul>
+                  <ul>
+                    <li>Hai</li>
+                  </ul>
+                  <ul>
+                    <li>Bye</li>
+                  </ul>
                 </div>
-                <div>
-                <ul>
-                  <li>Hello</li>
-                  <li>Hai</li>
-                  <li>Bye</li>
-                </ul>
-                </div>
-                <div>
-                <ul>
-                  <li>Hello</li>
-                  <li>Hai</li>
-                  <li>Bye</li>
-                </ul>
-                </div>
+                </CommonModal>
+              } */}
+        <Link>
+          <div className='logo'>
+              <img src={logo} alt='Internal Server Error...' />
+              <div className='logo_txt'>
+                <h3>SV</h3>
+                <span>EMPORIUM</span>
               </div>
-                </Popover.Body>
-              </Popover>
-            </Overlay>
           </div>
-          }
-          
-          </li>
-          <li>
-            <NavLink to='/contact-us'>Contact Us</NavLink>
-          </li>
-        </ul>
-      </div>
-      <div className='nav_icons'>
-        <ul>
-        <li onClick={()=>setIsMenuIcon(!isMenuIcon)}>
-          {isMenuIcon ? <RiMenu2Line size={25} /> : <RxCross2 size={25} />}
-          </li>
-          <li>
-            <SlUser size={20} className='cursor-pointer'/>
-          </li>
-          <li>
-            <CiSearch size={25} className='cursor-pointer' />
-          </li>
-          <li>
-            <div className='cursor-pointer'>             
-              <BsHandbag size={20}/>
+        </Link>
+        <div className={`nav_items ${isOpen && 'active'}`}>
+          <ul>
+            <li>
+              <NavLink activeClassName='activePage' to='/'>Home</NavLink>
+            </li>
+            <li>
+              <NavLink activeClassName='activePage' to='/categories'>Categories</NavLink>
+            </li>
+            <li className='overlay_parent'>
+              {isMobileDevice ? 
+                <Accordion>
+                <Accordion.Item eventKey="0">
+                <Accordion.Header>Products</Accordion.Header> 
+                <Accordion.Body>
+                  <ul>
+                    <li>
+                      Hello
+                    </li>
+                    <li>
+                      Hai
+                    </li>
+                    <li>
+                      Hello
+                    </li>
+                  </ul>
+                </Accordion.Body>
+                </Accordion.Item>
+                </Accordion>
+                :
+              <Link to='/'
+              onMouseOver={(e)=>handleMouseOver(e)}
+              // onMouseOut={(e)=>handleMouseOut(e)}
+              >Products</Link>}
+              {show &&
+              <div ref={ref} className='overlay_items'>      
+              <Overlay
+                show={show}
+                target={target}
+                placement="bottom"
+                container={ref}
+                containerPadding={20}
+                
+              >
+                <Popover id="popover-contained">
+                  <Popover.Body>
+                  <div className='hover_menu'>
+                    <div>
+                  <ul>
+                    <li>Hello</li>
+                    <li>Hai</li>
+                    <li>Bye</li>
+                  </ul>
+                  </div>
+                  <div>
+                  <ul>
+                    <li>Hello</li>
+                    <li>Hai</li>
+                    <li>Bye</li>
+                  </ul>
+                  </div>
+                  <div>
+                  <ul>
+                    <li>Hello</li>
+                    <li>Hai</li>
+                    <li>Bye</li>
+                  </ul>
+                  </div>
+                </div>
+                  </Popover.Body>
+                </Popover>
+              </Overlay>
             </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
+            }
+            
+            </li>
+            <li>
+              <NavLink activeClassName='activePage' to='/contact-us'>Contact Us</NavLink>
+            </li>
+          </ul>
+        </div>
+        <div className='nav_icons'>
+          <ul>
+            <li>
+              <SlUser size={20}/>
+            </li>
+            <li>
+              <CiSearch size={25}/>
+            </li>
+            <li>           
+                <BsHandbag onClick={()=>setOpenCart(true)} size={20}/>
+            </li>
+            <li onClick={()=>setIsOpen(prev=>!prev)} className='mobile-menu-icon'>
+              {isOpen ?<RxCross2 size={25} />: <RiMenu2Line size={25} /> }
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </>
   )
 }
 

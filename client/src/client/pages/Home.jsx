@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Slider from '../components/Slider/Slider';
 import Collections from '../components/Collections/Collections';
 import '../assets/css/style.css'
 import ProductsGroup from '../components/ProductsGroup/ProductsGroup';
 import Header from '../common/Header';
+import Cart from '../common/Cart';
 
 
 
 const Home = () => {
+  
+
   const slidesData = [
     {
       img:'https://www.seasonsemporium.com/cdn/shop/files/Holiday_Solmar_Dress_1920_x_800_f37e1501-9b63-41ce-8035-1e14be15a5b5_1944x.png?v=1692778585',

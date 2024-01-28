@@ -1,17 +1,38 @@
 
+body:has(.nav_items.active){
+    overflow-y: hidden;
+}
+.nav-shadow-wrapper{
+    width: 100vw;
+    position: absolute;
+    top:96px;
+    left: 0;
+    z-index: 999;
+    background-color: var(--shadowColor);
+    opacity: 0;
+    height: 0px;
+    transition: .5s opacity;
+}
+.nav-shadow-wrapper.active{
+    opacity: 1;
+    height: 100dvh;
+}
+
 .navbar{
     display: grid;
     grid-template-columns: 5rem 2fr 4fr 2fr 5rem;
     height: 6rem;
+    transition: .5s all;
 }
 
+
 .navbar img{
-    width: 3rem;
+    width: 4rem;
+    object-fit: cover;
 }
 
 .logo{
     display: flex;
-    /* grid-template-columns: 1fr 1fr; */
     justify-content: flex-start;
     align-items: center;
     grid-column: 2/3;
@@ -33,12 +54,11 @@
 }
 
 .nav_items ul{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    justify-content: center;
-    align-items: center;
+    display: flex;
     margin: 0;
     padding: 0;
+    gap: 30px;
+    height: 100%;
 }
 
 .nav_items ul li{
@@ -50,9 +70,15 @@
     color: #111;
 }
 
+.activePage,.nav_items ul li a:hover{
+    color: var(--primaryBGColor) !important;
+}
+
 .nav_icons ul{
     margin: 0;
-    padding: 0;
+    padding-right:20px;
+    display:flex;
+    gap: 5px;
     
 }
 
@@ -62,7 +88,7 @@
     padding: 0 15px;
 }
 
-.nav_icons ul li:first-child{
+.mobile-menu-icon{
     display: none;
 }
 
@@ -83,6 +109,7 @@
         display: grid;
         grid-template-columns: 0rem 2fr 4fr 0rem;
         height: 6rem;
+        position: relative;
     }
 
     .logo_txt h3{
@@ -91,26 +118,32 @@
         /* font-size: 12px; */
     }
 
-    .logo_txt span{
-        /* font-size: 12px; */
-    }
-
     .navbar img{
         width: 3rem;
     }
 
+    .mobile-menu-icon{
+        display: block;
+    }
+
     .nav_items{
         display: block;
-        position: fixed;
+        position: absolute;
         top: 96px;
-        right: -500px;
+        right: -100%;
         background-color: #fff;
-        width: 100%;
-        z-index: 2;
+        width: fit-content;
+        z-index: 999;
+        transition: .2s all;
+        width: 70%;
+    }
+    .nav_items ul li{
+        padding: 10px 20px;
+        display: flex;
     }
 
     .active{
-        right: 0;
+        right: 0%;
     }
 
     .nav_items ul{
@@ -127,10 +160,6 @@
         float: right;
         list-style-type: none;
         padding: 0 10px;
-    }
-
-    .nav_icons ul li:first-child{
-        display: block;
     }
 
     .accordion-item{

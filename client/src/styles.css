@@ -11,9 +11,12 @@
     --primaryBGColor:#e75480;
     --color:#ffff;
     --color2:#000;
-    --shadowColor:rgba(0,0,0,0.3)
+    --shadowColor:rgba(255,255,255,0.5);
 }
-
+body{
+    width: 100vw;
+    overflow-x: hidden;
+}
 
 a{
     text-decoration: none !important;
@@ -21,3 +24,4 @@ a{
 .active{
     color: var(--mainColor) !important;
 }
+
