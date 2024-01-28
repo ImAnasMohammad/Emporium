@@ -1,0 +1,12 @@
+
+.carousel-caption{
+    z-index: 1;
+}
+.gradient{
+    background-image: linear-gradient(to top,#000,rgba(0,0,0,0.2)) !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}

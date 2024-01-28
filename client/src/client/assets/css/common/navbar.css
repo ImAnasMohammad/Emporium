@@ -1,0 +1,154 @@
+
+.navbar{
+    display: grid;
+    grid-template-columns: 5rem 2fr 4fr 2fr 5rem;
+    height: 6rem;
+}
+
+.navbar img{
+    width: 3rem;
+}
+
+.logo{
+    display: flex;
+    /* grid-template-columns: 1fr 1fr; */
+    justify-content: flex-start;
+    align-items: center;
+    grid-column: 2/3;
+    text-align: center;
+}
+
+.logo img{
+    margin:0 20px 0 10px;
+}
+
+.logo_txt{
+    border-top: 4px solid #e0e0e0;
+    border-bottom: 4px solid #e0e0e0;
+}
+
+.logo_txt h3{
+    margin: 0;
+    font-family: 'Rubik Bubbles', system-ui;
+}
+
+.nav_items ul{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.nav_items ul li{
+    list-style-type: none;
+    text-align: center;
+}
+
+.nav_items ul li a{
+    color: #111;
+}
+
+.nav_icons ul{
+    margin: 0;
+    padding: 0;
+    
+}
+
+.nav_icons ul li{
+    float: right;
+    list-style-type: none;
+    padding: 0 15px;
+}
+
+.nav_icons ul li:first-child{
+    display: none;
+}
+
+.hover_menu{
+    display: flex;
+}
+
+.overlay_parent{
+    position: relative;
+}
+
+.overlay_items{
+    position: absolute;
+}
+
+@media screen and (max-width:900px){
+    .navbar{
+        display: grid;
+        grid-template-columns: 0rem 2fr 4fr 0rem;
+        height: 6rem;
+    }
+
+    .logo_txt h3{
+        margin: 0;
+        font-family: 'Rubik Bubbles', system-ui;
+        /* font-size: 12px; */
+    }
+
+    .logo_txt span{
+        /* font-size: 12px; */
+    }
+
+    .navbar img{
+        width: 3rem;
+    }
+
+    .nav_items{
+        display: block;
+        position: fixed;
+        top: 96px;
+        right: -500px;
+        background-color: #fff;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .active{
+        right: 0;
+    }
+
+    .nav_items ul{
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 20px 0px;
+        gap: 20px;
+        height:calc(100dvh - 96px);
+        z-index: 990;
+    }
+
+    .nav_icons ul li{
+        float: right;
+        list-style-type: none;
+        padding: 0 10px;
+    }
+
+    .nav_icons ul li:first-child{
+        display: block;
+    }
+
+    .accordion-item{
+        border: none !important;
+        text-decoration: underline;
+    }
+
+    .accordion-header{
+        outline: none !important;
+        background: #fff !important;
+    }
+
+    .accordion-button:not(.collapsed){
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .accordion-button:focus{
+        border-color: #fff !important;
+    }
+}

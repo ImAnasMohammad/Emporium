@@ -1,0 +1,52 @@
+.shop-btn{
+    background-color:var(--color);
+    color: var(--primaryBGColor);
+    padding: 10px 30px;
+    border:none;
+    outline: none;
+    font-size: 1rem;
+    letter-spacing: 1.1px;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition: all .5s;
+    overflow: hidden;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.shop-btn span{
+    z-index:4;
+}
+.shop-btn::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: var(--primaryBGColor);
+}
+.shop-btn:hover{
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--primaryBGColor);
+    transform: scale(1.05);
+}
+
+.shop-btn:hover::after{
+    animation: shopBtn 1s ease-in-out  ;
+}
+
+@keyframes shopBtn {
+    0%{
+        left: 0%;
+        width: 0%;
+    }
+    50%{
+        width: 30%;
+    }
+    100%{
+        width: 0%;
+        left: 100%;
+    }
+}
