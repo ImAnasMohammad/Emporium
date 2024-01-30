@@ -90,10 +90,10 @@ const Navbar = () => {
         <div className={`nav_items ${isOpen && 'active'}`}>
           <ul>
             <li>
-              <NavLink activeClassName='activePage' to='/'>Home</NavLink>
+              <NavLink to='/' >Home</NavLink>
             </li>
             <li>
-              <NavLink activeClassName='activePage' to='/categories'>Categories</NavLink>
+              <NavLink  to='/categories'>Categories</NavLink>
             </li>
             <li className='overlay_parent'>
               {isMobileDevice ? 
@@ -163,7 +163,7 @@ const Navbar = () => {
             
             </li>
             <li>
-              <NavLink activeClassName='activePage' to='/contact-us'>Contact Us</NavLink>
+              <NavLink to='/contact-us'>Contact Us</NavLink>
             </li>
           </ul>
         </div>

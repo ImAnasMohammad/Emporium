@@ -70,9 +70,7 @@ body:has(.nav_items.active){
     color: #111;
 }
 
-.activePage,.nav_items ul li a:hover{
-    color: var(--primaryBGColor) !important;
-}
+
 
 .nav_icons ul{
     margin: 0;
@@ -86,6 +84,11 @@ body:has(.nav_items.active){
     float: right;
     list-style-type: none;
     padding: 0 15px;
+}
+.nav_items ul li a{
+    /* font-weight: 500 !important; */
+    font-size: 1.1rem;
+    letter-spacing: 1.05px;
 }
 
 .mobile-menu-icon{
@@ -102,6 +105,9 @@ body:has(.nav_items.active){
 
 .overlay_items{
     position: absolute;
+}
+nav ul li a.active,.nav_items ul li a:hover{
+    color: var(--primaryBGColor) !important;
 }
 
 @media screen and (max-width:900px){

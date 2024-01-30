@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import Slider from '../components/Slider/Slider';
-import Collections from '../components/Collections/Collections';
-import '../assets/css/style.css'
-import ProductsGroup from '../components/ProductsGroup/ProductsGroup';
+import Slider from '../components/Slider';
+import Collections from '../common/Collections';
+import '../assets/css/Components/shopBtn.css'
+import ProductsGroup from '../common/ProductsGroup';
 import Header from '../common/Header';
 import Cart from '../common/Cart';
+import Footer from '../common/Footer';
 
 
 
@@ -39,7 +40,7 @@ const Home = () => {
     },
     {
       img:'https://www.seasonsemporium.com/cdn/shop/collections/Beauty_180x.jpg?v=1621554569',
-      label:'Beauty & body',
+      label:'Beauty',
       url:'/sdfsfsdfsdf'
     },
     {
@@ -48,12 +49,16 @@ const Home = () => {
       url:'/sdfsfsdfsdf'
     },
   ]
+  
   return (
     <>
       <Header />
       <Slider slides={slidesData}/>
       <Collections data={group}/>
-      <ProductsGroup />
+      <ProductsGroup  heading={'new arrivals'} items={[1,1,1,1,1]} className="new" label="new" />
+      <ProductsGroup  heading={'Best sellers'} items={[1,1,1,1,1,1,1,1]} className="discount" label="Best Seller" />
+      <ProductsGroup  heading={'Offered Products'} items={[1,1,1,1,1,1,1,1,1,1,1]} className="discount" label="10%" />
+      <Footer/>
     </>
   )
 }

@@ -1,6 +1,5 @@
 import React from 'react';
-import '../../assets/css/shopBtn.css';
-import './Collections.css'
+import '../assets/css/common/Collections.css'
 
 const Collections = ({data}) => {
   return (

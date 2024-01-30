@@ -7,8 +7,10 @@
     box-sizing: border-box;
     font-family: 'Montserrat', sans-serif;
 }
+
 :root{
     --primaryBGColor:#e75480;
+    --primaryLiteBGColor:rgb(255, 243, 247);
     --color:#ffff;
     --color2:#000;
     --shadowColor:rgba(255,255,255,0.5);
@@ -25,3 +27,38 @@ a{
     color: var(--mainColor) !important;
 }
 
+.btn{
+    padding: 15px 30px !important;
+    text-transform: uppercase;
+    background-color: var(--primaryBGColor) !important;
+    border: none !important;
+    letter-spacing: 1.2px;
+    position: relative;
+    overflow: hidden;
+}
+.btn::after{
+    content:'';
+    position: absolute;
+    height: 200%;
+    box-shadow: 0px 0px 10px 20px rgba(255,255,255,0.5);
+    width:0px;
+    top:0%;
+    left:-100%;
+    transform: rotate(10deg);
+}
+.btn:hover::after{
+    animation: 1.5s btnAnimation;
+}
+
+@keyframes btnAnimation {
+    0%{
+        top:0%;
+        left:-100%;
+        opacity: 1;
+    }
+    100%{
+        top:0%;
+        left:100%;
+        opacity: 0;
+    }
+}

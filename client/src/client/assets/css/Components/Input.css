@@ -1,0 +1,29 @@
+.custom-input-wrapper{
+    width: 100%;
+
+}
+.custom-input-wrapper label{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+}
+.custom-input-wrapper input,
+.custom-input-wrapper textarea{
+    width:100%;
+    outline: none;
+    border:1px solid rgb(194, 194, 194);
+    padding: 10px;
+    resize: none;
+}
+.custom-input-wrapper textarea{
+    min-height: 150px;
+}
+.custom-input-wrapper input:focus,
+.custom-input-wrapper textarea:focus{
+    border-color: black;
+}
+.custom-input-wrapper label div{
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}

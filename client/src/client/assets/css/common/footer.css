@@ -1,0 +1,90 @@
+footer>div{
+    background-color: var(--primaryLiteBGColor);
+    padding: 100px 50px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+    gap:10px
+}
+
+footer img{
+    aspect-ratio: 2.6 / 1;
+    object-fit: cover;
+    width: 15rem;
+}
+.footer-item span{
+    display: none;
+}
+.footer-item h3{
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+}
+.footer-item ul{
+    padding: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    gap:15px
+}
+.footer-item ul li{
+    list-style-type: none;
+}
+.footer-item ul li a{
+    color: var(--color2);
+    position: relative;
+}
+.footer-item ul li a::after{
+    content: ' ';
+    position: absolute;
+    height: 2px;
+    width: 0%;
+    left: 0;
+    bottom: -5px;
+    background-color: var(--color2);
+    border-radius: 2px;
+    transition: .5s width;
+}
+
+.footer-item ul li a:hover::after{
+    width: 100%;
+}
+.social-icons{
+    margin-right: 10px;
+    font-size: 1.5rem;
+}
+.social ul{
+    gap: 20px;
+}
+
+.copy-rights-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.youtube{
+    color: red;
+}
+.insta{
+    color:#833AB4
+}
+.facebook{
+    color:#316FF6
+}
+
+@media screen and (max-width:710px) {
+
+    footer>div{
+        padding: 10px 20px;
+        gap: 30px;
+    }
+    .logo-wrapper{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 20px;
+    }
+    footer ul{
+        align-items: center;
+    }
+    .footer-item h3{
+        text-align: center;
+    }
+}

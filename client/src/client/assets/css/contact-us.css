@@ -1,0 +1,31 @@
+.contact-us-wrapper{
+    max-width: 1200px;
+    margin:50px  auto;
+    padding: 0px 20px ;
+}
+
+.form-wrapper form,.form-wrapper form>div{
+    display: flex;
+    gap: 20px;
+}
+.form-wrapper form{
+    flex-direction: column;
+}
+.form-wrapper form>div{
+    display: flex;
+    gap: 20px;
+}
+.submit-btn-contact{
+    display: flex;
+    justify-content: center;
+}
+.contact-us-wrapper h2{
+    padding: 20px 0px 50px 0px;
+    text-align: center;
+}
+
+@media screen and (max-width:1000px) {
+    .form-wrapper form>div{
+        flex-direction: column;
+    }
+}
