@@ -121,7 +121,6 @@ nav ul li a.active,.nav_items ul li a:hover{
     .logo_txt h3{
         margin: 0;
         font-family: 'Rubik Bubbles', system-ui;
-        /* font-size: 12px; */
     }
 
     .navbar img{
@@ -186,4 +185,43 @@ nav ul li a.active,.nav_items ul li a:hover{
     .accordion-button:focus{
         border-color: #fff !important;
     }
+}
+.search-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-wrapper button{
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    transform: translateY(2px);
+    padding:  16px;
+    border-radius: 50%;
+    transition: .3s all;
+    color: var(--color);
+    background-color: var(--primaryBGColor);
+    border:none;
+}
+
+.search-wrapper .custom-input-wrapper,.search-wrapper input{
+    border-radius: 60px;
+    
+}
+.search-wrapper input{
+    padding: 10px 15px!important;
+}
+.search-wrapper .custom-input-wrapper label{
+    gap: 0px;
+}
+.modal-content {
+    border-radius: 120px !important;
+    background-color: transparent !important;
+}
+.modal-body{
+    padding: 0px !important;
+    margin:0px !important;
+    
+    background-color: transparent;
 }

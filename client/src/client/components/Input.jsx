@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Input = ({label,type,value,setValue,required,name}) => {
+const Input = ({label,type,value,setValue,required,name,className=''}) => {
   return (
-    <div className="custom-input-wrapper">
+    <div className={`custom-input-wrapper ${className}`}>
         <label>
             <div>{label}</div>
             <input

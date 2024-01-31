@@ -3,9 +3,8 @@ import Slider from '../components/Slider';
 import Collections from '../common/Collections';
 import '../assets/css/Components/shopBtn.css'
 import ProductsGroup from '../common/ProductsGroup';
-import Header from '../common/Header';
 import Cart from '../common/Cart';
-import Footer from '../common/Footer';
+import Layout from '../components/Layout';
 
 
 
@@ -52,13 +51,13 @@ const Home = () => {
   
   return (
     <>
-      <Header />
-      <Slider slides={slidesData}/>
-      <Collections data={group}/>
-      <ProductsGroup  heading={'new arrivals'} items={[1,1,1,1,1]} className="new" label="new" />
-      <ProductsGroup  heading={'Best sellers'} items={[1,1,1,1,1,1,1,1]} className="discount" label="Best Seller" />
-      <ProductsGroup  heading={'Offered Products'} items={[1,1,1,1,1,1,1,1,1,1,1]} className="discount" label="10%" />
-      <Footer/>
+      <Layout>
+        <Slider slides={slidesData}/>
+        <Collections data={group}/>
+        <ProductsGroup  heading={'new arrivals'} items={[1,1,1,1,1]} className="new" label="new" />
+        <ProductsGroup  heading={'Best sellers'} items={[1,1,1,1,1,1,1,1]} className="discount" label="Best Seller" />
+        <ProductsGroup  heading={'Offered Products'} items={[1,1,1,1,1,1,1,1,1,1,1]} className="discount" label="10%" />
+      </Layout>
     </>
   )
 }

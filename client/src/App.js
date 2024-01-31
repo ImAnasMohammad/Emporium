@@ -13,6 +13,8 @@ import ShipmentAddress from "./client/pages/Users/ShipmentAddress";
 import Logout from "./client/pages/Users/Logout";
 import NotFound from "./client/pages/NotFound";
 import ContactUs from "./client/pages/ContactUs";
+import Join from "./client/pages/Join";
+import Register from "./client/pages/Register";
 
 
 
@@ -25,6 +27,10 @@ function App() {
       <Route path="/" element={<Home/>}/>
       <Route path="products/:query" element={<Products/>}/>
       <Route path="product/:id" element={<Product/>}/>
+      <Route path="join">
+        <Route path="/join" element={<Join/>}/>
+        <Route path="register" element={<Register/>}/>
+      </Route>
       <Route path="contact-us" element={<ContactUs/>}/>
 
       {/* Routes for user  */}

@@ -9,22 +9,27 @@ import { CiSearch } from "react-icons/ci";
 import { BsHandbag } from "react-icons/bs";
 import { RiMenu2Line } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
+import { IoCloseOutline } from "react-icons/io5";
 
 import CommonModal from "./CommonModal";
 import CommonOverlay from './CommonOverlay';
 
 import Overlay from 'react-bootstrap/Overlay';
+import Modal from 'react-bootstrap/Modal';
 import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { Link, NavLink } from 'react-router-dom';
 import Cart from './Cart';
+import Input from '../components/Input';
 
 
 const Navbar = () => {
 
   const [isOpen,setIsOpen] = useState(false);
   const [openCart,setOpenCart] = useState(false);
+  const [search,setSearch] = useState('');
+  const [searchOpen,setSearchOpen] = useState(false);
 
   // const [dataOnHover,setDataOnHover] = useState(false)
   const isMobileDevice = /Mobi/i.test(window.navigator.userAgent)
@@ -60,6 +65,7 @@ const Navbar = () => {
 
   return (
     <>
+    <SearchBox searchOpen={searchOpen} setSearchOpen={setSearchOpen} search={search} setSearch={setSearch}/>
       <Cart openCart={openCart} setOpenCart={setOpenCart}/>
       <nav className='navbar'>
         <div onClick={()=>setIsOpen(prev=>!prev)}className={`nav-shadow-wrapper ${isOpen ? 'active' :''}`}></div>
@@ -91,9 +97,6 @@ const Navbar = () => {
           <ul>
             <li>
               <NavLink to='/' >Home</NavLink>
-            </li>
-            <li>
-              <NavLink  to='/categories'>Categories</NavLink>
             </li>
             <li className='overlay_parent'>
               {isMobileDevice ? 
@@ -163,6 +166,9 @@ const Navbar = () => {
             
             </li>
             <li>
+              <NavLink  to='/about-us'>About us</NavLink>
+            </li>
+            <li>
               <NavLink to='/contact-us'>Contact Us</NavLink>
             </li>
           </ul>
@@ -170,13 +176,13 @@ const Navbar = () => {
         <div className='nav_icons'>
           <ul>
             <li>
-              <SlUser size={20}/>
+              <NavLink to='/join' style={{color:'var(--color2)'}}><SlUser size={20}/></NavLink>
             </li>
             <li>
-              <CiSearch size={25}/>
+              <CiSearch onClick={()=>setSearchOpen(true)} size={25}/>
             </li>
             <li>           
-                <BsHandbag onClick={()=>setOpenCart(true)} size={20}/>
+                <BsHandbag onClick={()=>setOpenCart(true)} style={{cursor:'pointer'}} size={20}/>
             </li>
             <li onClick={()=>setIsOpen(prev=>!prev)} className='mobile-menu-icon'>
               {isOpen ?<RxCross2 size={25} />: <RiMenu2Line size={25} /> }
@@ -186,6 +192,32 @@ const Navbar = () => {
       </nav>
     </>
   )
+}
+
+
+
+function SearchBox({searchOpen,setSearchOpen,search,setSearch}) {
+
+  const handleClose = () => setSearchOpen(false);
+
+  return (
+    <>
+      <Modal
+        show={searchOpen}
+        onHide={handleClose}
+        keyboard={false}
+        size="lg"
+        style={{borderRadius:'100px !important' }}
+      >
+        <Modal.Body style={{borderRadius:'100px'}}>
+          <div className="search-wrapper">
+            <Input type={'search'} value={search} setValue={setSearch}/>
+            <button><CiSearch/></button>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 }
 
 export default Navbar

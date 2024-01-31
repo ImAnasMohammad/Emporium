@@ -1,0 +1,41 @@
+.contact-us-wrapper{
+    max-width: 600px;
+    width: 100%;
+}
+.form-wrapper>form{
+    gap: 30px;
+}
+.join-fotter{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    text-transform: capitalize;
+}
+.password-wrapper>span{
+    display: flex;
+    align-items: center;
+}
+.password-wrapper>span>button{
+    transform: translateY(40%);
+    border-radius:50%;
+    cursor: pointer;
+    font-size:22px;
+    padding: 9px;
+    display: flex;
+    align-items: center;
+    border:none;
+    background-color: transparent;
+}
+
+
+
+.password-wrapper>span>button:hover{
+    background-color: var(--primaryLiteBGColor);
+}
+
+@media screen and (max-width:1000px) {
+    
+    .password-wrapper{
+        flex-direction: row !important;
+    }
+}

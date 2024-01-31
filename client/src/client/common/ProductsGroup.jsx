@@ -3,6 +3,7 @@ import '../assets/css/common/ProductsGroup.css'
 import { Link } from 'react-router-dom';
 import img from '../assets/images/p1.webp'
 import img2 from '../assets/images/p2.webp'
+import Animate from '../components/Animate';
 
 const ProductsGroup = ({heading,items,className,label}) => {
   return (
@@ -30,22 +31,21 @@ const ProductsGroup = ({heading,items,className,label}) => {
 
 
 const SingleProduct = ({item,index,className,label}) =>{
-  return<div className="col-5 col-sm-4 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
-    <Link to='/'>
-      <div className="single-product">
-        <div className="part-1" style={{backgroundImage:`url("${index%2 === 0 ?img:img2}")`}}>
-          {className && label &&<span className={className}>{label}</span>}
-          {
-            console.log(className,label)
-          }
+  return<div className="col-5 col-sm-4 col-md-4 col-lg-3 col-xl-3 col-xxl-3 single-product">
+    <Animate>
+      <Link to='/'>
+        <div className="single-product">
+          <div className="part-1" style={{backgroundImage:`url("${index%2 === 0 ?img:img2}")`}}>
+            {className && label &&<span className={className}>{label}</span>}
+          </div>
+          <div className="part-2">
+            <h3 className="product-title">Here Product Title</h3>
+            <h4 class="product-old-price">$79.99</h4>
+            <h4 className="product-price">$49.99</h4>
+          </div>
         </div>
-        <div className="part-2">
-          <h3 className="product-title">Here Product Title</h3>
-          <h4 class="product-old-price">$79.99</h4>
-          <h4 className="product-price">$49.99</h4>
-        </div>
-      </div>
-    </Link>
+      </Link>
+    </Animate>
   </div>
 
 }

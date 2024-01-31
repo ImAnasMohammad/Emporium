@@ -82,3 +82,8 @@
     background-color: #444444;
     transform: translateY(-50%);
 }
+
+.single-product{
+    animation: renderAnimation .5s linear;
+}
+

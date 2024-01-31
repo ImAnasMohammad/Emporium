@@ -21,7 +21,7 @@
 }
 .custom-input-wrapper input:focus,
 .custom-input-wrapper textarea:focus{
-    border-color: black;
+    border-color: var(--primaryBGColor);
 }
 .custom-input-wrapper label div{
     text-transform: uppercase;

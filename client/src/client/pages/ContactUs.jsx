@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
-import Header from '../common/Header'
-import Footer from '../common/Footer'
 import Input from '../components/Input'
 import '../assets/css/Components/Input.css'
 import '../assets/css/contact-us.css'
 import TextArea from '../components/TextArea'
+import Layout from '../components/Layout'
 
 const ContactUs = () => {
   const [name,setName] = useState('');
   const [email,setEmail] = useState('');
   const [message,setMessage] = useState('');
   return (
-    <div>
-        <Header/>
+      <Layout>
         <div className="contact-us-wrapper">
           <h2>CONTACT US</h2>
           <div className="form-wrapper">
@@ -28,8 +26,7 @@ const ContactUs = () => {
             </form>
           </div>
         </div>
-        <Footer/>
-    </div>
+      </Layout>
   )
 }
 

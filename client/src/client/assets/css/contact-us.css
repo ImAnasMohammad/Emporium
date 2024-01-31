@@ -3,7 +3,9 @@
     margin:50px  auto;
     padding: 0px 20px ;
 }
-
+.contact-us-wrapper>h2{
+    text-transform: uppercase;
+}
 .form-wrapper form,.form-wrapper form>div{
     display: flex;
     gap: 20px;
