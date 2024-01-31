@@ -1,7 +1,7 @@
 import React from 'react'
-import Animate from './Animate'
-import Header from '../common/Header'
-import Footer from '../common/Footer'
+import Animate from '../layouts/Animate'
+import Header from './Header'
+import Footer from './Footer'
 
 const Layout = ({children}) => {
   return (

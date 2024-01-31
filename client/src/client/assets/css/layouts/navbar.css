@@ -200,9 +200,13 @@ nav ul li a.active,.nav_items ul li a:hover{
     padding:  16px;
     border-radius: 50%;
     transition: .3s all;
+    color: var(--color2);
+    background-color: var(--color);
+    border:none;
+}
+.search-wrapper button:hover{
     color: var(--color);
     background-color: var(--primaryBGColor);
-    border:none;
 }
 
 .search-wrapper .custom-input-wrapper,.search-wrapper input{

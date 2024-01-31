@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Input from '../components/Input'
 import '../assets/css/Components/Input.css'
-import '../assets/css/contact-us.css'
+import '../assets/css/pages/contact-us.css'
 import TextArea from '../components/TextArea'
-import Layout from '../components/Layout'
+import Layout from '../common/Layout'
 
 const ContactUs = () => {
   const [name,setName] = useState('');

@@ -1,5 +1,5 @@
 import React from 'react'
-import '../assets/css/Components/Slider.css'
+import '../assets/css/layouts/Slider.css'
 
 const Slider = ({slides}) => {
   return (

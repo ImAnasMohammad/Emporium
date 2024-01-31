@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from "../assets/images/logo.jpeg";
 import { IoIosArrowUp } from "react-icons/io";
-import '../assets/css/common/footer.css'
+import '../assets/css/layouts/footer.css'
 import { Link } from 'react-router-dom';
 import { FaYoutube,FaInstagramSquare,FaFacebook } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";

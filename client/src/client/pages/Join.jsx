@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import Layout from '../components/Layout'
+import Layout from '../common/Layout'
 import Input from '../components/Input'
 import { FaRegEye } from "react-icons/fa";
 import { FaRegEyeSlash } from "react-icons/fa";
-import '../assets/css/Join.css'
+import '../assets/css/pages/Join.css'
 import '../assets/css/Components/Input.css'
-import '../assets/css/contact-us.css'
+import '../assets/css/pages/contact-us.css'
 import { Link } from 'react-router-dom';
 
 const Join = () => {
@@ -27,7 +27,7 @@ const Join = () => {
             </form>
             <div className='join-fotter'>
                 <Link to="/join/register">create account</Link>
-                <Link to="/forgot">Forgot password ?</Link>
+                <Link to="/join/forgot-password">Forgot password ?</Link>
             </div>
           </div>
         </div>

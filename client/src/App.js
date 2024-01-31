@@ -15,6 +15,7 @@ import NotFound from "./client/pages/NotFound";
 import ContactUs from "./client/pages/ContactUs";
 import Join from "./client/pages/Join";
 import Register from "./client/pages/Register";
+import ForgotPassword from "./client/pages/ForgotPassword";
 
 
 
@@ -30,6 +31,7 @@ function App() {
       <Route path="join">
         <Route path="/join" element={<Join/>}/>
         <Route path="register" element={<Register/>}/>
+        <Route path="forgot-password" element={<ForgotPassword/>}/>
       </Route>
       <Route path="contact-us" element={<ContactUs/>}/>
 

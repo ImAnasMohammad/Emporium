@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import logo from "../assets/images/logo.jpeg";
-import "../assets/css/common/navbar.css";
+import '../assets/css/layouts/navbar.css'
 
 import Accordion from 'react-bootstrap/Accordion';
 
@@ -20,7 +20,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import { Link, NavLink } from 'react-router-dom';
-import Cart from './Cart';
+import Cart from '../layouts/Cart';
 import Input from '../components/Input';
 
 

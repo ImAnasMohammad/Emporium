@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import Slider from '../components/Slider';
-import Collections from '../common/Collections';
+import Slider from '../layouts/Slider';
+import Collections from '../layouts/Collections';
 import '../assets/css/Components/shopBtn.css'
-import ProductsGroup from '../common/ProductsGroup';
-import Cart from '../common/Cart';
-import Layout from '../components/Layout';
+import ProductsGroup from '../layouts/ProductsGroup';
+// import Cart from '../common/Cart';
+import Layout from '../common/Layout';
 
 
 
