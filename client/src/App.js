@@ -16,6 +16,9 @@ import ContactUs from "./client/pages/ContactUs";
 import Join from "./client/pages/Join";
 import Register from "./client/pages/Register";
 import ForgotPassword from "./client/pages/ForgotPassword";
+import AboutUs from "./client/pages/AboutUs";
+import ValidateOTP from "./client/pages/ValidateOTP";
+import DashBoard from "./admin/pages/DashBoard";
 
 
 
@@ -26,13 +29,16 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home/>}/>
+      <Route path="products/" element={<Products/>}/>
       <Route path="products/:query" element={<Products/>}/>
       <Route path="product/:id" element={<Product/>}/>
       <Route path="join">
         <Route path="/join" element={<Join/>}/>
         <Route path="register" element={<Register/>}/>
         <Route path="forgot-password" element={<ForgotPassword/>}/>
+        <Route path="validate-otp" element={<ValidateOTP/>}/>
       </Route>
+      <Route path="about-us" element={<AboutUs/>}/>
       <Route path="contact-us" element={<ContactUs/>}/>
 
       {/* Routes for user  */}
@@ -48,6 +54,9 @@ function App() {
       </Route>
 
       {/* Routes for admin */}
+      <Route path="/admin" element={<Outlet/>}>
+        <Route path="dashboard" element={<DashBoard/>}/>
+      </Route>
       <Route path="*" element={<NotFound/>}/>
     </Routes>
   );

@@ -1,0 +1,26 @@
+.subscribe-letter-wrapper{
+    background-color: var(--primaryLiteBGColor);
+    margin-bottom: 10px;
+}
+.subscribe-letter-wrapper>div{
+    max-width: 500px;
+    margin: auto;
+    padding: 130px 0px;
+}
+.subscribe-letter-wrapper h1,.subscribe-letter-wrapper p{
+    text-align: center;
+}
+
+.subscribe-letter-wrapper form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.subscribe-letter-wrapper button{
+    padding: 9px 0px !important;
+    flex: 0 0 150px;
+    transform: translateY(3px);
+}
+.subscribe-letter-wrapper input{
+    height: 100%;
+}

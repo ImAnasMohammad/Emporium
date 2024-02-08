@@ -5,6 +5,11 @@ import '../assets/css/Components/shopBtn.css'
 import ProductsGroup from '../layouts/ProductsGroup';
 // import Cart from '../common/Cart';
 import Layout from '../common/Layout';
+import img1 from '../assets/images/p.png'
+import img2 from '../assets/images/p1.webp'
+import img3 from '../assets/images/p2.webp'
+import { ProductGroup1 } from '../layouts/ProductGroup1';
+import SubscribeLetter from '../layouts/SubscribeLetter';
 
 
 
@@ -48,15 +53,54 @@ const Home = () => {
       url:'/sdfsfsdfsdf'
     },
   ]
+
+  const productGroup = [
+    {
+      name:'Product1',
+      price:2500,
+      discount:0,
+      img:img1
+    },
+    {
+      name:'sdfsfsdf dsfdsfsdfds',
+      price:2500,
+      discount:0,
+      img:img2
+    },
+    {
+      name:'Producsfsdfsdfsfsdfsdfsdfsdft1',
+      price:2500,
+      discount:100,
+      img:img3
+    },
+    {
+      name:'Prodsdfsdfdfsdfsdfdfuct1',
+      price:2500,
+      discount:10,
+      img:img1
+    },
+    {
+      name:'Produ sdfsdf fsdfdsfsdfsdfdfdfct1',
+      price:2500,
+      discount:10,
+      img:img2
+    },
+    {
+      name:'Prosdfsfsd sdfdssfsf duct1',
+      price:2500,
+      discount:25,
+      img:img3
+    }
+  ]
   
   return (
     <>
-      <Layout>
+      <Layout title={"Helloo"}>
         <Slider slides={slidesData}/>
         <Collections data={group}/>
-        <ProductsGroup  heading={'new arrivals'} items={[1,1,1,1,1]} className="new" label="new" />
-        <ProductsGroup  heading={'Best sellers'} items={[1,1,1,1,1,1,1,1]} className="discount" label="Best Seller" />
-        <ProductsGroup  heading={'Offered Products'} items={[1,1,1,1,1,1,1,1,1,1,1]} className="discount" label="10%" />
+        {/* <ProductsGroup  heading={'new arrivals'} items={productGroup} className="new" label="new" /> */}
+        <ProductGroup1 style={{backgroundColor:''}} heading={'new arrivals'} tag="Best sellers" products={productGroup}/>
+        <SubscribeLetter/>
       </Layout>
     </>
   )

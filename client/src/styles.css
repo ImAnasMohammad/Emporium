@@ -17,12 +17,22 @@
     outline-color: var(--primaryBGColor) !important;
 }
 
+/* Disable number input arrows */
+input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
 
 body{
-    width: 100vw;
+    max-width: 100vw;
     overflow-x: hidden;
-    scrollbar-gutter: stable !important;
-
+    scrollbar-gutter: stable both-edges;
 }
 
 a{
@@ -78,4 +88,8 @@ a{
         opacity: 1;
         transform: translateY(0px);
     }
+}
+
+.text-bold{
+    font-weight: bold;
 }

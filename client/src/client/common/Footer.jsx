@@ -42,7 +42,7 @@ const Footer = () => {
         </div>
         <div className='copy-rights-wrapper'>
             <p>© {new Date().getFullYear()} SV Emporium </p>
-            <p>Website by <Link to="" className='web-developers-link'>Web developers</Link></p>
+            <p>Website by <Link to="https://www.instagram.com/xerobyte_official" target="_blank" className='web-developers-link'>XEROBYTE</Link></p>
         </div>
     </footer>
   )

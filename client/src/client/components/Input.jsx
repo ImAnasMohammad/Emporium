@@ -1,17 +1,11 @@
 import React from 'react'
 
-const Input = ({label,type,value,setValue,required,name,className=''}) => {
+const Input = ({label,className='',attributes}) => {
   return (
     <div className={`custom-input-wrapper ${className}`}>
         <label>
             <div>{label}</div>
-            <input
-                type={type}
-                value={value}
-                onChange={e=>setValue(e.target.value)}
-                required={required}
-                name={name}
-            />
+            <input {...attributes}/>
         </label>
     </div>
   )
