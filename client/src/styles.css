@@ -33,6 +33,7 @@ body{
     max-width: 100vw;
     overflow-x: hidden;
     scrollbar-gutter: stable both-edges;
+    width: 100%;
 }
 
 a{
@@ -43,9 +44,8 @@ a{
 }
 
 .btn{
-    padding: 15px 30px !important;
+    padding: 15px 30px;
     text-transform: uppercase;
-    background-color: var(--primaryBGColor) !important;
     border: none !important;
     letter-spacing: 1.2px;
     position: relative;
@@ -63,6 +63,18 @@ a{
 }
 .btn:hover::after{
     animation: 1.5s btnAnimation;
+}
+.btn-primary{
+    background-color: var(--primaryBGColor) !important;
+}
+.btn-secondary{
+    border:2px solid var(--primaryBGColor) !important;
+    background-color: transparent !important;
+    color:var(--primaryBGColor) !important;
+}
+.btn-secondary::after{
+    display: none;
+
 }
 
 @keyframes btnAnimation {
@@ -92,4 +104,18 @@ a{
 
 .text-bold{
     font-weight: bold;
+}
+
+
+/* category form style  */
+
+.category-form-wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+}
+
+.category-form-wrapper input{
+    flex:1 1 auto;
 }

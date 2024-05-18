@@ -18,8 +18,12 @@ import Register from "./client/pages/Register";
 import ForgotPassword from "./client/pages/ForgotPassword";
 import AboutUs from "./client/pages/AboutUs";
 import ValidateOTP from "./client/pages/ValidateOTP";
-import DashBoard from "./admin/pages/DashBoard";
 
+
+// admin pages
+import Dashboard from './admin/pages/DashBoard'
+import Customers from './admin/pages/Customers'
+import Categories from "./admin/pages/Categories";
 
 
 
@@ -55,7 +59,9 @@ function App() {
 
       {/* Routes for admin */}
       <Route path="/admin" element={<Outlet/>}>
-        <Route path="dashboard" element={<DashBoard/>}/>
+        <Route path="dashboard" element={<Dashboard/>}/>
+        <Route path="customers" element={<Customers/>}/>
+        <Route path="categories" element={<Categories/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Routes>

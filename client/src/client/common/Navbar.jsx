@@ -86,22 +86,24 @@ function SearchBox({searchOpen,setSearchOpen,search,setSearch}) {
   }
 
   return (
-    <>
+    <div className='client-search-wrapper'>
+    
       <Modal
         show={searchOpen}
         onHide={handleClose}
         keyboard={false}
         size="lg"
         style={{borderRadius:'100px !important' }}
+        className='custom-search-model'
       >
-        <Modal.Body style={{borderRadius:'100px'}}>
+        <Modal.Body style={{borderRadius:'100px'}} className='custom-search-model-body'>
           <div className="search-wrapper">
             <Input attributes={attributes}/>
             <button><CiSearch/></button>
           </div>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }
 

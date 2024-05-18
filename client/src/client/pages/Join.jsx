@@ -11,7 +11,14 @@ import { Link } from 'react-router-dom';
 const Join = () => {
     const [isOpen,setIsOpen] = useState(false);
     const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [password,setPassword] = useState('');
+
+    const passwordAttributes = {
+      type:`${isOpen?'text':'password'}`,
+      value:password,
+      onChange:(e)=>setPassword(e.target.value),
+      required:true
+    }
   return (
     <Layout>
         <div className="contact-us-wrapper">
@@ -20,7 +27,7 @@ const Join = () => {
             <form action="">
                 <Input type='email' label="email" name="email" value={email} setValue={setEmail} required={true} />
                 <div className="password-wrapper">
-                    <Input type={`${isOpen?'text':'password'}`} label="password" name="password" value={password} setValue={setPassword} required={true} className='password-field' />
+                    <Input label="password" name="password" attributes={passwordAttributes} className='password-field' />
                     <span><button type='button' onClick={()=>setIsOpen(prev=>!prev)}>{isOpen?<FaRegEye/>:<FaRegEyeSlash/>}</button></span>
                 </div>
                 <button type="submit" className='btn btn-primary'>Submit</button>

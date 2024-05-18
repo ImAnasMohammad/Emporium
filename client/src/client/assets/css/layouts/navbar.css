@@ -86,7 +86,6 @@ body:has(.nav_items.active){
     padding: 0 15px;
 }
 .nav_items ul li a{
-    /* font-weight: 500 !important; */
     font-size: 1.1rem;
     letter-spacing: 1.05px;
 }
@@ -219,13 +218,27 @@ nav ul li a.active,.nav_items ul li a:hover{
 .search-wrapper .custom-input-wrapper label{
     gap: 0px;
 }
-.modal-content {
+.custom-search-model .modal-content {
     border-radius: 120px !important;
     background-color: transparent !important;
 }
-.modal-body{
+.custom-search-model-body.modal-body {
     padding: 0px !important;
     margin:0px !important;
     
     background-color: transparent;
+}
+
+@media (max-width:420px) {
+
+    .navbar h3{
+        display: none;
+    }
+    .navbar span{
+        display: none;
+    }
+    .navbar  ul{
+        padding-left: 0px;
+    }
+
 }
