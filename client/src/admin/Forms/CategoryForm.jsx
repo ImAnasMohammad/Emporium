@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 // css in client/style.css 
 
-const CategoryForm = ({tempCategory='',tempOptions='',id=null,handleClick}) => {
+const CategoryForm = ({tempCategory='',tempOptions='',id=null,handleSubmit}) => {
     const [category,setCategory] = useState(tempCategory);
     const [options,setOptions] = useState(tempOptions);
     const [img,setImg] = useState('sdfdfs');
@@ -13,7 +13,7 @@ const CategoryForm = ({tempCategory='',tempOptions='',id=null,handleClick}) => {
         <input type="text" placeholder='Enter Options like s,m,l,xl,xxl' value={options} onChange={(e)=>setOptions(e.target.value)} />
         <button 
           type="submit" 
-          onClick={()=>handleClick({name:category,options,image:img},id)} 
+          onClick={()=>handleSubmit({name:category,options,image:img},id)} 
           className='btn btn-primary' 
           disabled={
             (category==='' || options==='') ||

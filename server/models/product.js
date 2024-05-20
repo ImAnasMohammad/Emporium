@@ -24,7 +24,7 @@ const ProductSchema = mongoose.Schema({
         type:String,
         default:''
     },
-    variatons:[{
+    variations:[{
         variation:{
             type:String,
             required:true
@@ -34,7 +34,7 @@ const ProductSchema = mongoose.Schema({
             default:0,
             min:0
         },
-        quntity:{
+        quantity:{
             type:Number,
             default:0,
             min:0

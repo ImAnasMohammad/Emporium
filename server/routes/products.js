@@ -4,7 +4,8 @@ const router = express.Router();
 
 // all categories routes
 router.post('/',createProduct);
-router.get('/',getAllProdcuts);
+router.get('/:sort?',getAllProducts);
+router.get('/search/:search',getProductsBySearch);
 router.get('/:id',getProductById);
 router.delete('/:id',deleteProduct);
 router.put('/:id',updateProduct);
@@ -17,7 +18,7 @@ function validateProductData(obj){
         image,
         images,
         brand,
-        variatons,
+        variations,
         category,
         labels
     } = obj;
@@ -28,10 +29,10 @@ function validateProductData(obj){
     // image
     // images
     // brand
-    // variatons
+    // variations
     //     variaton
     //     price
-    //     quntity
+    //     quantity
     //     discount
     // category
     // labels
@@ -43,13 +44,13 @@ function validateProductData(obj){
     if(!image) return 'Invalid Image';
     if(!category) return 'Invalid Category';
 
-    if(!variatons || !Array.isArray(variatons)) return 'Invalid Variations';
+    if(!variations || !Array.isArray(variations)) return 'Invalid Variations';
 
     let msg = false;
 
-    variatons.forEach(({variation='',price,discount,quntity})=>{
+    variations.forEach(({variation='',price,discount,quantity})=>{
         if(discount ===undefined) msg= `Invalid discount of '${variation}' variation`;
-        if(quntity===undefined ) msg= `Invalid quntity of '${variation}' variation`;
+        if(quantity===undefined ) msg= `Invalid quantity of '${variation}' variation`;
         if(price === undefined) msg= `Invalid price of '${variation}' variation`;
         if(variation === '') msg= 'Invalid Variation';
     })
@@ -62,9 +63,38 @@ function validateProductData(obj){
 
 
 // get all product 
-async function getAllProdcuts (req,res){
+async function getAllProducts (req,res){
     try{
-        const products = await Product.find();
+        const reqSort = req.params.sort ?? 0
+        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+
+        const sortList = [
+            {'createdAt':1},
+            {'createdAt':-1},
+            {'name':1},
+            {'name':-1},
+        ]
+        const products = await Product.find().sort(sortList[sort]);
+        if(!products){
+            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
+        }else{
+            return res.json({success:true,data:products})
+        }
+    }catch(err){
+        console.log("error at products - get ",err);
+        return res.status(500).json({success:false,msg:"Internal server error"})
+    }
+}
+
+async function getProductsBySearch (req,res){
+    try{
+
+        const {search} = req.params;
+        if(!search) return res.json({success:false,msg:'Search is empty'});
+
+        const regex = new RegExp(search, 'i'); // i means case insensitive
+
+        const products = await Product.find({name:regex});
         if(!products){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
         }else{

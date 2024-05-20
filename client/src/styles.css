@@ -7,6 +7,7 @@
     --color:#ffff;
     --color2:#000;
     --shadowColor:rgba(255,255,255,0.8);
+    --progressBarColor:rgb(214, 214, 214);
 }
 
 *{
@@ -118,4 +119,71 @@ a{
 
 .category-form-wrapper input{
     flex:1 1 auto;
+}
+
+
+
+/* progress bar  */
+.progress-bar-wrapper{
+    padding: 35px 0px;
+    position: relative;
+}
+
+.progress-bar-line{
+    background-color: var(--progressBarColor);
+    width:80%;
+    max-width:500px ;
+    margin:0px auto;
+    position: relative;
+    border-radius: 5px;
+}
+
+.progress-items{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    height: 8px;
+    /* z-index: -1; */
+}
+
+.completedProgressBar{
+    height: 100%;
+    position: absolute;
+    background-color:var(--primaryBGColor);
+    border-radius: 5px;
+    left: 0;
+    top:0px;
+}
+
+.progress-bar-line .progress-items span{
+    transform: translateY(100%);
+    position: relative;
+    margin-top: 24px;
+}
+
+.progress-bar-line .progress-items span:nth-child(1){
+    transform: translate(-50%,100%);
+}
+
+
+.progress-bar-line .progress-items span:last-child{
+    transform: translate(50%,100%);
+}
+
+.progress-bar-line span::before{
+    content: '';
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background-color: var(--progressBarColor);
+    position: absolute;
+    bottom:0px;
+    left: 50%;
+    transform: translate(-50%,-12px);
+
+}
+
+.progress-bar-line span.activated::before{
+    background-color: var(--primaryBGColor);
 }

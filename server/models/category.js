@@ -18,7 +18,12 @@ const categorySchema = mongoose.Schema({
         type:String,
         require:true,
         default:''
-    }]
+    }],
+    createAt:{
+        type:Date,
+        default:Date.now(),
+        require:true
+    }
 });
 
 

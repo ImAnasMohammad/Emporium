@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 
 // all categories routes
-router.get('/',getAllCategories);
-router.get('/:search',getCategoryBySearch);
+router.get('/:sort?',getAllCategories);
+router.get('/search/:search',getCategoryBySearch);
 router.post('/',createCategory);
 router.delete('/:id',deleteCategory);
 router.put('/:id',updateCategory);
@@ -28,11 +28,23 @@ function validateCategoryData(obj){
 // get all categories 
 async function getAllCategories (req,res){
     try{
-        const categoies = await Category.find();
-        if(!categoies){
+        const reqSort = req.params.sort ?? 0
+        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+
+        const sortList = [
+            {'createAt':1},
+            {'createAt':-1},
+            {'name':1},
+            {'name':-1},
+        ]
+
+
+        const categories = await Category.find().sort(sortList[sort]);
+
+        if(!categories){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
         }else{
-            return res.json({success:true,data:categoies})
+            return res.json({success:true,data:categories})
         }
     }catch(err){
         console.log("error at categories - get ",err);

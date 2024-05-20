@@ -27,9 +27,9 @@ const SideBar = ({children,page}) => {
       label:'Categories'
     },
     {
-      icon:'bi bi-geo-alt',
-      to:'/admin/tours',
-      label:'Tours'
+      icon:'bi bi-box',
+      to:'/admin/inventory',
+      label:'Inventory'
     },
     {
       icon:'bi bi-hand-thumbs-up',

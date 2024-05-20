@@ -24,6 +24,8 @@ import ValidateOTP from "./client/pages/ValidateOTP";
 import Dashboard from './admin/pages/DashBoard'
 import Customers from './admin/pages/Customers'
 import Categories from "./admin/pages/Categories";
+import Inventory from "./admin/pages/Inventory";
+import ProductCreateEdit from "./admin/pages/ProductCreateEdit";
 
 
 
@@ -60,8 +62,10 @@ function App() {
       {/* Routes for admin */}
       <Route path="/admin" element={<Outlet/>}>
         <Route path="dashboard" element={<Dashboard/>}/>
-        <Route path="customers" element={<Customers/>}/>
         <Route path="categories" element={<Categories/>}/>
+        <Route path="inventory" element={<Inventory/>}/>
+        <Route path="inventory/product/:id?" element={<ProductCreateEdit/>}/>
+        <Route path="customers" element={<Customers/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Routes>
