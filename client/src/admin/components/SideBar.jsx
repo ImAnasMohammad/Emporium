@@ -48,7 +48,7 @@ const SideBar = ({children,page}) => {
   <header className={`header ${isOpen && 'body-pd'}`}>
     <div className={`header_toggle`}> <i className="bi bi-list" onClick={()=>setIsOpen(prev=>!prev)} /> </div>
     <h3>{page}</h3>
-    <div className="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt /> </div>
+    <div className="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt="logo" /> </div>
   </header>
   <div className={`l-navbar ${isOpen && 'show-custom-slide-box-emp'}`}>
     <nav className="nav">
@@ -64,7 +64,7 @@ const SideBar = ({children,page}) => {
         </div>
       </div>
       <NavLink className="nav_link" to='/admin/sign-out' activeClass='active'>
-        <i class="bi bi-box-arrow-right nav_icon"></i>
+        <i className="bi bi-box-arrow-right nav_icon"></i>
         <span className="nav_name">SignOut</span>
       </NavLink>
     </nav>
