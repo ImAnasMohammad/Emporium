@@ -6,7 +6,7 @@ const ProgressStatusBar = ({status,progressItems}) => {
         <div className="progress-bar-line">
             <div className="progress-items">
                 {
-                    progressItems?.map((item,index)=><span key={index}className={status>index && `activated`}>{item}</span>)
+                  progressItems?.map((item,index)=><span key={index} className={`${status>index && 'activated'}`}>{item}</span>)
                 }
             </div>
             <div className="completedProgressBar" style={{width:`${(progressItems.length-status)*100/progressItems.length}%`}}></div>
