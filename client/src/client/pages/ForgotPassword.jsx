@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import Layout from '../common/Layout'
 import Input from '../components/Input'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useValidateEmail } from '../../context/useValidateEmail'
+import { toast } from 'react-toastify'
 
 const ForgotPassword = () => {
-    const [email,setEmail] = useState('')
-    const handleSubmit = ()=>{
-
+    const [email,setEmail] = useState('');
+    const [validateEmail,setValidateEmail] = useValidateEmail();
+    const redirect = useNavigate()
+    const handleSubmit = (e)=>{
+      e.preventDefault();
+      if(email === ''){
+        toast.error("Invalid mail")
+        return;
+      }
+      setValidateEmail(prev=>prev={...prev,mail:email,redirectTo:'/join/update-password'})
+      redirect("/join/request-otp")
     }
   return (
     <Layout>
@@ -14,7 +24,14 @@ const ForgotPassword = () => {
       <h2>Find Your Account</h2>
       <div className="form-wrapper">
         <form onSubmit={handleSubmit}>
-            <Input type='email' label="email" name="email" value={email} setValue={setEmail} required={true} />
+            <Input
+              type='email'
+              label="email"
+              name="email"
+              value={email}
+              onChange={e=>setEmail(prev=>prev=e.target.value)}
+              required={true}
+            />
             <button type="submit" className='btn btn-primary'>Send OTP</button>
         </form>
         <div className='join-fotter'>

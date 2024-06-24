@@ -1,8 +1,6 @@
 import React from 'react';
 import '../assets/css/layouts/ProductsGroup.css'
 import { Link } from 'react-router-dom';
-import img from '../assets/images/p1.webp'
-import img2 from '../assets/images/p2.webp'
 import Animate from '../layouts/Animate';
 import { formatCurrency } from '../common/numberFormat';
 

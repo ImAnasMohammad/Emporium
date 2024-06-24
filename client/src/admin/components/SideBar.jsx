@@ -45,7 +45,7 @@ const SideBar = ({children,page}) => {
 
   return (
 <div className='slide-bar-wrapper'>
-  <header className={`header ${isOpen && 'body-pd'}`}>
+  <header style={{zIndex:'999 !important'}} className={`header ${isOpen && 'body-pd'}`}>
     <div className={`header_toggle`}> <i className="bi bi-list" onClick={()=>setIsOpen(prev=>!prev)} /> </div>
     <h3>{page}</h3>
     <div className="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt="logo" /> </div>

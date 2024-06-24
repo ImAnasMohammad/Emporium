@@ -10,7 +10,7 @@ const categorySchema = mongoose.Schema({
         require:true
     },
     image:{
-        type:String,
+        type:{name:{type:String},blurHash:{type:String}},
         require:true,
         default:''
     },

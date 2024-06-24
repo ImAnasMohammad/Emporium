@@ -7,7 +7,10 @@ import { toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import ConformationModel from '../components/ConformationModel';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import LazyLoadImage from '../components/LazyLoadImage';
+import formatCurrency from '../../utils/formatCurrency';
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 
 
@@ -21,8 +24,7 @@ const Inventory = () => {
   const [sort,setSort] = useState(0);
   const navigate = useNavigate();
 
-  const tableHeadings = ["S.NO","Product Name",'Edit','Delete'];
-  const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
+  const tableHeadings = ["S.NO","Photo","Product Name","Category","Variations",'Edit','Delete'];
 
   const getAllProducts = async(url=`${serverURL}/products/${sort}`)=>{
     setProducts(products=>products=[]);
@@ -43,12 +45,11 @@ const Inventory = () => {
 
 
   useEffect(()=>{
-      getAllProducts()
-  },[])
-
-
-  useEffect(()=>{
-      getAllProducts(`${serverURL}/products/search/${search}`)
+    const timeOut = setTimeout(()=>getAllProducts(`${serverURL}/products/search/${search}`),search===''?0:1000);
+    return ()=>{
+      clearTimeout(timeOut)
+    }
+      
   },[search])
 
 
@@ -56,6 +57,7 @@ const Inventory = () => {
 
   const handleDelete = async(id)=>{
     setIsLoading(prev=>true);
+    setError(prev=>prev='')
     try{
       const res = await axios.delete(`${serverURL}/Products/${deleteProductId}`);
       if(res?.data?.success===true){
@@ -126,7 +128,6 @@ const Inventory = () => {
 const AllRows = ({data,handleDeleteProduct}) =>{
   return<>
     {
-      
       data?.map((data,index)=><SingleRow data={data} key={index} sno={index} handleDeleteProduct={handleDeleteProduct}/>)
     }
   </>
@@ -140,7 +141,29 @@ const SingleRow = (
   const navigate = useNavigate();
   return <tr>
     <td>{sno}</td>
+    <td>{
+      <LazyLoadImage
+        src={`${serverURL+"/upload/"+data?.image?.name}`}
+        alt={data?.name}
+        blurHash={data?.image?.blurHash}
+        width={'100px'}
+        style={{aspectRatio:'3 / 4',width:'100%',objectFit:'cover'}}
+      />
+    }</td>
     <td>{data?.name}</td>
+    <td>{data?.category?.name}</td>
+    <td>
+      <table className='table'>
+        
+      {
+        data?.variations?.map(item=><tr key={item?.variation}>
+          <td>{item?.variation}</td>
+          <td>{item?.quantity}</td>
+          <td>{formatCurrency(item?.price)}</td>
+        </tr>)
+      }
+      </table>
+   </td>
     <td>
       <button onClick={()=>navigate(`product/${data?._id}`)} className='btn'>
         <i class="bi bi-pencil color-blue"></i>

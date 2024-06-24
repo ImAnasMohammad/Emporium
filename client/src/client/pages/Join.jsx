@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../common/Layout'
 import Input from '../components/Input'
 import { FaRegEye } from "react-icons/fa";
@@ -6,28 +6,67 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import '../assets/css/pages/Join.css'
 import '../assets/css/Components/Input.css'
 import '../assets/css/pages/contact-us.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {toast} from 'react-toastify'
+import axios from 'axios'
+import { useAuth } from '../../context/useAuth';
+
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const Join = () => {
+  const [auth,setAuth] = useAuth();
     const [isOpen,setIsOpen] = useState(false);
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('');
+    const redirect = useNavigate()
 
-    const passwordAttributes = {
-      type:`${isOpen?'text':'password'}`,
-      value:password,
-      onChange:(e)=>setPassword(e.target.value),
-      required:true
+    const handleSubmit = async (e)=>{
+      e.preventDefault()
+      try{
+
+        const res = await axios.post(`${serverURL}/auth/login`,{mail:email,password});
+
+        if(res?.data?.success){
+          toast.success("Login successful");
+          let data = {
+            name:res.data?.name ?? '',
+            token:res.data?.token ?? ''
+          }
+          setAuth(prev=>prev={...data})
+          localStorage.setItem("auth",JSON.stringify(data));
+          redirect('/')
+        }else{
+          toast.error(res?.data?.msg ?? "Invalid details")
+        }
+
+      }catch(err){
+        toast.error(err?.message ?? "SOmething went wrong")
+      }
     }
   return (
     <Layout>
         <div className="contact-us-wrapper">
           <h2>Login</h2>
           <div className="form-wrapper">
-            <form action="">
-                <Input type='email' label="email" name="email" value={email} setValue={setEmail} required={true} />
+            <form onSubmit={handleSubmit}>
+                <Input
+                  type='email'
+                  label="email"
+                  name="email"
+                  value={email}
+                  onChange={e=>setEmail(e.target.value)}
+                  required={true}
+                  />
                 <div className="password-wrapper">
-                    <Input label="password" name="password" attributes={passwordAttributes} className='password-field' />
+                    <Input
+                      label="password"
+                      name="password"
+                      type={`${isOpen?'text':'password'}`}
+                      className='password-field'
+                      value={password}
+                      onChange={(e)=>setPassword(e.target.value)}
+                      required={true}
+                      />
                     <span><button type='button' onClick={()=>setIsOpen(prev=>!prev)}>{isOpen?<FaRegEye/>:<FaRegEyeSlash/>}</button></span>
                 </div>
                 <button type="submit" className='btn btn-primary'>Submit</button>

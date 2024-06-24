@@ -12,11 +12,13 @@ async function isRevoked(req,payload,done){
 const authJWT = jwt({
     secret,
     algorithms:['HS256'],
-    isRevoked,
+    // isRevoked,
 }).unless({
     path:[
         {url:/\/api\/v1\/products(.*)/,methods:['GET','OPTIONS']},
-        {url:/\/api\/v1\/categories(.*)/,methods:['GET','OPTIONS']}
+        {url:/\/api\/v1\/categories(.*)/,methods:['GET','OPTIONS']},
+        {url:/\/api\/v1\/auth(.*)/,methods:['POST','GET']},
+        {url:/\/api\/v1\/upload(.*)/,methods:['GET']}
     ]
 });
 

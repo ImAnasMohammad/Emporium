@@ -6,7 +6,8 @@ const router = express.Router();
 router.post('/',createProduct);
 router.get('/:sort?',getAllProducts);
 router.get('/search/:search',getProductsBySearch);
-router.get('/:id',getProductById);
+router.get('/label/:type/:value/:sort?',getLabeledProducts);
+router.get('/getProduct/:id',getProductById);
 router.delete('/:id',deleteProduct);
 router.put('/:id',updateProduct);
 
@@ -22,20 +23,6 @@ function validateProductData(obj){
         category,
         labels
     } = obj;
-
-
-    // name
-    // description
-    // image
-    // images
-    // brand
-    // variations
-    //     variaton
-    //     price
-    //     quantity
-    //     discount
-    // category
-    // labels
 
     
     if(!name) return 'Invalid Name';
@@ -54,7 +41,6 @@ function validateProductData(obj){
         if(price === undefined) msg= `Invalid price of '${variation}' variation`;
         if(variation === '') msg= 'Invalid Variation';
     })
-    console.log(msg)
     return msg ; //if product is validated
 }
 
@@ -74,7 +60,44 @@ async function getAllProducts (req,res){
             {'name':1},
             {'name':-1},
         ]
-        const products = await Product.find().sort(sortList[sort]);
+        const products = await Product.find().populate('category').select('-images').sort(sortList[sort]);
+        if(!products){
+            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
+        }else{
+            return res.json({success:true,data:products})
+        }
+    }catch(err){
+        console.log("error at products - get ",err);
+        return res.status(500).json({success:false,msg:"Internal server error"})
+    }
+}
+// get labeled product 
+async function getLabeledProducts (req,res){
+    try{
+        const type = req.params.type ?? '';
+        const value = req.params.value ?? '';
+        const reqSort = req.params.sort ?? 0
+        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+        
+        if(type === '' || value==='') return res.json({success:false,msg:"Invalid Details"})
+        
+        let query = {};
+
+        if(type === 'label'){
+            query = {labels: { $in: value }}
+        }else if(type === 'category'){
+            query = {category:value}
+        }else{
+            return res.json({success:false,msg:'Invalid details'})
+        }
+
+        const sortList = [
+            {'createdAt':1},
+            {'createdAt':-1},
+            {'name':1},
+            {'name':-1}
+        ]
+        const products = await Product.find(query).populate('category').select('-images').sort(sortList[sort]);
         if(!products){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
         }else{
@@ -94,7 +117,12 @@ async function getProductsBySearch (req,res){
 
         const regex = new RegExp(search, 'i'); // i means case insensitive
 
-        const products = await Product.find({name:regex});
+        const products = await Product.find({
+            $or: [
+                { name: regex },
+                { description: regex }
+            ]
+        });
         if(!products){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
         }else{
@@ -114,7 +142,7 @@ async function getProductById(req,res){
         if(!id) return res.json({success:false,msg:'Product ID is empty'});
 
 
-        let products = await Product.findById(id);
+        let products = await Product.findById(id).populate('category').select('-_id');
 
         if(!products) return res.json({success:false,msg:"Product not found"})
 

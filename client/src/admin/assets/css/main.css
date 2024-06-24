@@ -221,3 +221,15 @@
   .search-bar-wrapper:focus-within{
     border-color:rgba(169, 169, 169, 1);
   }
+
+   /* image upload label */
+  .image-upload-label{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border:2px dashed rgb(218 218 218);
+    height:100%;
+    width:100%;
+    color:rgb(130,130,130);
+    cursor:pointer;
+  }

@@ -31,7 +31,8 @@ const UserSchema = mongoose.Schema({
         default:false
     },
     otp:{
-        type:Number
+        type:String,
+        default:''
     },
     
     createdAt:{

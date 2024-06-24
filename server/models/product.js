@@ -14,11 +14,24 @@ const ProductSchema = mongoose.Schema({
         require:true
     },
     image:{
-        type:String,
-        default:''
+        name:{
+            type:String,
+            default:''
+        },
+        blurHash:{
+            type:String,
+            default:''
+        }
     },
     images:[{
-        type:String
+        name:{
+            type:String,
+            default:''
+        },
+        blurHash:{
+            type:String,
+            default:''
+        }
     }],
     brand:{
         type:String,
@@ -47,7 +60,7 @@ const ProductSchema = mongoose.Schema({
     }],
     category:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'Categories',
+        ref:'Category',
         required:true
     },
     labels:[

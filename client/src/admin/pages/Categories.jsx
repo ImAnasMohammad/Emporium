@@ -8,12 +8,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import CategoryForm from '../Forms/CategoryForm';
 import ConformationModel from '../components/ConformationModel';
+import LazyLoadImage from '../components/LazyLoadImage';
 
 
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 // Model for form create and update categories 
 
-function FormModal({category,id=null,show,setShow,handleSubmit}) {
+function FormModal({category,id=null,show,setShow,handleSubmit,isLoading}) {
 
   const handleClose = ()=>setShow(prev=>!prev);
 
@@ -28,7 +30,12 @@ function FormModal({category,id=null,show,setShow,handleSubmit}) {
           <Modal.Title>{`${id !== null ?'Update':'Create New '} Category`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <CategoryForm tempCategory={category?.name} tempOptions={category?.options} id={id} handleSubmit={handleSubmit} />
+          <CategoryForm
+            isLoading={isLoading}
+            id={id}
+            handleSubmit={handleSubmit}
+            category={category}
+          />
         </Modal.Body>
       </Modal>
     </div>
@@ -40,16 +47,45 @@ const Categories = () => {
   const [search,setSearch] = useState('');
   const [categories,setCategories]= useState([]);
   const [error,setError] = useState(false);
-  const [editCategory,setEditCategory] = useState('');
+  const [editCategory,setEditCategory] = useState({
+    name:'',
+    options:[],
+    image:{
+      name:'',
+      blurHash:''
+    }
+  });
   const [editCategoryId,setEditCategoryId] = useState(null);
   const [deleteCategoryId,setDeleteCategoryId] = useState(null);
   const [show,setShow] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const [sort,setSort] = useState(0);
 
-  const tableHeadings = ["Categories Name","Options",'Edit','Delete'];
-  const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
+  const tableHeadings = ["Categories Name","Image","Options",'Edit','Delete'];
 
+  const uploadImage = async (categoryTemp)=>{
+    try{
+      if(categoryTemp?.image?.name instanceof File){
+        const formData = new FormData();
+        formData.append('images',categoryTemp?.image?.name);
+        const resUploadImage = await axios.post(`${serverURL}/upload`,formData);
+        if(resUploadImage?.data?.success === true){
+          categoryTemp.image = resUploadImage?.data?.files[0];
+          return categoryTemp;
+        }else{
+          toast.error("Something went wrong while uploading image");
+          return false;
+        }
+      }else{
+        return categoryTemp
+      }
+    }catch(err){
+      toast.error(err?.message);
+      return false;
+
+    }
+
+  }
   const getAllCategories = async(url=`${serverURL}/categories/${sort}`)=>{
     setCategories(categories=>categories=[]);
     setIsLoading(prev=>true);
@@ -67,14 +103,14 @@ const Categories = () => {
   
     }
 
-
   useEffect(()=>{
-      getAllCategories()
-  },[])
-  
-  useEffect(()=>{
-      getAllCategories(`${serverURL}/categories/search/${search}`)
+    const timeOut = setTimeout(()=>getAllCategories(`${serverURL}/categories/search/${search}`),search ===''?0:100);
+    return ()=>{
+      clearTimeout(timeOut)
+    }
+      
   },[search])
+  
 
 
   // api's function 
@@ -82,10 +118,12 @@ const Categories = () => {
   const handleDelete = async(id)=>{
     setIsLoading(prev=>true);
     try{
-      const res = await axios.delete(`${serverURL}/categories/${deleteCategoryId}`);
+      let id = deleteCategoryId;
+      setDeleteCategoryId(prev=>prev=null);
+      const res = await axios.delete(`${serverURL}/categories/${id}`);
+      console.log(res)
       if(res?.data?.success===true){
         toast.success("Category Deleted successfully.");
-        setDeleteCategoryId(prev=>prev=null);
         getAllCategories();
       }else{
         setError(res.data.msg ?? "Something went wrong.");
@@ -100,6 +138,8 @@ const Categories = () => {
     const options = [...new Set(newCategory.options.split(','))].filter(ele=>ele!=='');
     setIsLoading(prev=>true);
     try{
+      newCategory = await uploadImage(newCategory);
+      if(!newCategory) return;
       const res = await axios.put(`${serverURL}/categories/${id}`,{...newCategory,options});
       if(res?.data?.success===true){
         toast.success(res?.data?.msg);
@@ -118,8 +158,11 @@ const Categories = () => {
 
   const handleCreate = async (newCategory)=>{
     const options = [...new Set(newCategory.options.split(','))].filter(ele=>ele!=='');
-    setIsLoading(prev=>true);
+    setIsLoading(prev=>prev=true);
+    setError(prev=>prev='')
     try{
+      newCategory = await uploadImage(newCategory);
+      if(!newCategory) return;
       const res = await axios.post(`${serverURL}/categories`,{...newCategory,options});
       if(res?.data?.success===true){
         toast.success("Category created successfully.");
@@ -175,12 +218,13 @@ const Categories = () => {
             category={editCategory} 
             id={editCategoryId}
             handleSubmit={editCategoryId===null?handleCreate:handleEdit}
+            isLoading={isLoading}
           />
           <ConformationModel
             show={deleteCategoryId} 
             setShow={()=>setDeleteCategoryId(null)} 
             heading={'Delete Category'} 
-            content={'Are you sure want to delete this category'} 
+            content={'Are you sure want to delete this category ? All products related to this category will be delete.'} 
             label='Delete' 
             handleClick={handleDelete}
           />
@@ -218,14 +262,26 @@ const SingleRow = (
 
 )=>{
 
-  const options = data?.options.join(',')
+  const options = data?.options.join(',');
+
   
   return <tr>
     <td>{data?.name}</td>
+    <td>
+      <div style={{width:'100px',overflow:'hidden',aspectRatio:'1 / 1'}}>
+      <LazyLoadImage
+              src={`${serverURL+"/upload/"+data?.image?.name}`}
+              alt={data?.name}
+              blurHash={data?.image?.blurHash}
+              width={'100%'}
+              style={{width:'100%',aspectRatio:'1 / 1',objectFit:'cover'}}
+            />
+      </div>
+      </td>
     <td>{options}</td>
     {/* <td>{formattedNumber(data?.noOfProducts)}</td> */}
     <td>
-      <button onClick={()=>handleEditCategory({name:data?.name,options},data?._id)} className='btn'>
+      <button onClick={()=>handleEditCategory(data,data?._id)} className='btn'>
         <i class="bi bi-pencil color-blue"></i>
       </button>
     </td>

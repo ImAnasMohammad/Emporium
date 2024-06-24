@@ -1,4 +1,4 @@
-import { Outlet, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import './styles.css'
 import Home from "./client/pages/Home";
 import Products from "./client/pages/Products";
@@ -6,7 +6,7 @@ import Product from "./client/pages/Product";
 
 import CheckOut from "./client/pages/Users/CheckOut";
 import Address from "./client/pages/Users/Address";
-import OrderReceived from "./client/pages/Users/OrderReceived";
+import MyOrders from "./client/pages/Users/MyOrders";
 import PersonalInformation from "./client/pages/Users/PersonalInformation";
 import PaymentInformation from "./client/pages/Users/PaymentInformation";
 import ShipmentAddress from "./client/pages/Users/ShipmentAddress";
@@ -26,6 +26,11 @@ import Customers from './admin/pages/Customers'
 import Categories from "./admin/pages/Categories";
 import Inventory from "./admin/pages/Inventory";
 import ProductCreateEdit from "./admin/pages/ProductCreateEdit";
+import RequestOTP from "./client/pages/RequestOTP";
+import UpdatePassword from "./client/pages/UpdatePassword";
+import Profile from "./client/pages/Users/Profile";
+import PrivateAuthRoute from "./PrivateRoute/PrivateAuthRoute";
+import PublicAuthRoute from "./PrivateRoute/PublicAuthRoute";
 
 
 
@@ -35,23 +40,26 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home/>}/>
-      <Route path="products/" element={<Products/>}/>
-      <Route path="products/:query" element={<Products/>}/>
+      <Route path="products/:type?/:value?/:category?" element={<Products/>}/>
       <Route path="product/:id" element={<Product/>}/>
-      <Route path="join">
+      <Route path="join" element={<PublicAuthRoute/>}>
         <Route path="/join" element={<Join/>}/>
         <Route path="register" element={<Register/>}/>
         <Route path="forgot-password" element={<ForgotPassword/>}/>
         <Route path="validate-otp" element={<ValidateOTP/>}/>
+        <Route path="request-otp" element={<RequestOTP/>}/>
+        <Route path="update-password" element={<UpdatePassword/>}/>
       </Route>
       <Route path="about-us" element={<AboutUs/>}/>
       <Route path="contact-us" element={<ContactUs/>}/>
 
       {/* Routes for user  */}
-      <Route path="/user" element={<Outlet/>}>
+      <Route path="/profile" element={<PrivateAuthRoute/>}>
+        
+        <Route path="" element={<Profile/>}/>
         <Route path="check-out" element={<CheckOut/>}/>
         <Route path="address" element={<ShipmentAddress/>}/>
-        <Route path="order-received" element={<OrderReceived/>}/>
+        <Route path="my-orders" element={<MyOrders/>}/>
 
         <Route path="edit-personal-information" element={<PersonalInformation/>}/>
         <Route path="edit-payment-information" element={<PaymentInformation/>}/>
@@ -60,7 +68,7 @@ function App() {
       </Route>
 
       {/* Routes for admin */}
-      <Route path="/admin" element={<Outlet/>}>
+      <Route path="/admin" element={<PrivateAuthRoute/>}>
         <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="categories" element={<Categories/>}/>
         <Route path="inventory" element={<Inventory/>}/>

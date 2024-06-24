@@ -1,19 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Slider from '../layouts/Slider';
 import Collections from '../layouts/Collections';
 import '../assets/css/Components/shopBtn.css'
 import ProductsGroup from '../layouts/ProductsGroup';
-// import Cart from '../common/Cart';
 import Layout from '../common/Layout';
-import img1 from '../assets/images/p.png'
-import img2 from '../assets/images/p1.webp'
-import img3 from '../assets/images/p2.webp'
 import { ProductGroup1 } from '../layouts/ProductGroup1';
 import SubscribeLetter from '../layouts/SubscribeLetter';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
+
 
 
 
 const Home = () => {
+
+  const [newArrivals,setNewArrivals] = useState([]);
   
 
   const slidesData = [
@@ -53,53 +56,31 @@ const Home = () => {
       url:'/sdfsfsdfsdf'
     },
   ]
-
-  const productGroup = [
-    {
-      name:'Product1',
-      price:2500,
-      discount:0,
-      img:img1
-    },
-    {
-      name:'sdfsfsdf dsfdsfsdfds',
-      price:2500,
-      discount:0,
-      img:img2
-    },
-    {
-      name:'Producsfsdfsdfsfsdfsdfsdfsdft1',
-      price:2500,
-      discount:100,
-      img:img3
-    },
-    {
-      name:'Prodsdfsdfdfsdfsdfdfuct1',
-      price:2500,
-      discount:10,
-      img:img1
-    },
-    {
-      name:'Produ sdfsdf fsdfdsfsdfsdfdfdfct1',
-      price:2500,
-      discount:10,
-      img:img2
-    },
-    {
-      name:'Prosdfsfsd sdfdssfsf duct1',
-      price:2500,
-      discount:25,
-      img:img3
-    }
-  ]
   
+  async function getLabeledProducts(label,setLabeledProducts){
+    try{
+      const res = await axios.get(`${serverURL}/products/label/label/${label}`);
+      if(res?.data?.success === true ){
+        setLabeledProducts(prev=>prev=res?.data?.data)
+      }else{
+        toast.error(res?.data?.msg ?? "Something went wrong");
+      }
+    }catch(err){
+      toast.error(err.message ?? "Something went wrong");
+    }
+    
+  }
+
+  useEffect(()=>{
+    getLabeledProducts('new-arrival',setNewArrivals);
+  },[])
   return (
     <>
       <Layout title={"Helloo"}>
         <Slider slides={slidesData}/>
         <Collections data={group}/>
-        {/* <ProductsGroup  heading={'new arrivals'} items={productGroup} className="new" label="new" /> */}
-        <ProductGroup1 style={{backgroundColor:''}} heading={'new arrivals'} tag="Best sellers" products={productGroup}/>
+        <ProductGroup1 style={{backgroundColor:''}} heading={'new arrivals'} tag="New Arrivals" products={newArrivals}/>
+        {/* <ProductsGroup style={{backgroundColor:''}} heading={'new arrivals'} tag="New Arrivals" products={newArrivals}/> */}
         <SubscribeLetter/>
       </Layout>
     </>

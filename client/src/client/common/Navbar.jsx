@@ -11,7 +11,8 @@ import Modal from 'react-bootstrap/Modal';
 import { Link, NavLink } from 'react-router-dom';
 import Cart from '../layouts/Cart';
 import Input from '../components/Input';
-
+import { useAuth } from '../../context/useAuth';
+import { IoIosLogOut } from "react-icons/io";
 
 const Navbar = () => {
 
@@ -19,6 +20,7 @@ const Navbar = () => {
   const [openCart,setOpenCart] = useState(false);
   const [search,setSearch] = useState('');
   const [searchOpen,setSearchOpen] = useState(false);
+  const [auth] = useAuth();
 
   return (
     <>
@@ -44,7 +46,7 @@ const Navbar = () => {
               <NavLink  to='/products'>Products</NavLink>
             </li>
             <li>
-              <NavLink  to='/about-us'>About us</NavLink>
+              <NavLink  to={`${auth?.token && auth?.name ?'/profile/my-orders':'/join'}`}>My Orders</NavLink>
             </li>
             <li>
               <NavLink to='/contact-us'>Contact Us</NavLink>
@@ -54,16 +56,24 @@ const Navbar = () => {
         <div className='nav_icons'>
           <ul>
             <li>
-              <NavLink to='/join' style={{color:'var(--color2)'}}><SlUser size={20}/></NavLink>
-            </li>
-            <li>
-              <CiSearch onClick={()=>setSearchOpen(true)} size={25}/>
+              <CiSearch onClick={()=>setSearchOpen(true)} style={{cursor:'pointer'}}size={25}/>
             </li>
             <li>           
                 <BsHandbag onClick={()=>setOpenCart(true)} style={{cursor:'pointer'}} size={20}/>
             </li>
             <li onClick={()=>setIsOpen(prev=>!prev)} className='mobile-menu-icon'>
               {isOpen ?<RxCross2 size={25} />: <RiMenu2Line size={25} /> }
+            </li>
+            <li>
+              {
+                auth?.name !=='' && auth?.token !=='' ?
+                  <NavLink to= '/profile/logout' style={{color:'var(--color2)'}}>
+                    <IoIosLogOut size={20}/>
+                  </NavLink>
+                :<NavLink to= '/join' style={{color:'var(--color2)'}}>
+                  <SlUser size={20}/>
+                </NavLink>
+              }
             </li>
           </ul>
         </div>

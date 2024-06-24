@@ -1,5 +1,6 @@
 const {Category} = require('../models/category.js');
 const express = require('express');
+const { Product } = require('../models/product.js');
 const router = express.Router();
 
 // all categories routes
@@ -92,13 +93,17 @@ async function createCategory(req,res){
 }
 
 
-//delete categoty
+//delete category
 async function deleteCategory(req,res){
     try{
 
         if(!req.params.id)return res.json({success:false,msg:'Invalid Category Id'});
-        let deletedCategory = await Category.findByIdAndDelete(req.params.id)
-        
+        const catId = req.params.id;
+
+        const deleteProducts = await Product.deleteMany({category:catId});
+        let deletedCategory = await Category.findByIdAndDelete(catId);
+
+
         if(!deletedCategory) return res.json({success:false,msg:'Category cannot be deleted'})
     
         return res.json({success:true,msg:"Category deleted successfully.."})
@@ -109,7 +114,7 @@ async function deleteCategory(req,res){
 }
 
 
-//update categoty
+//update category
 async function updateCategory(req,res){
     try{
 

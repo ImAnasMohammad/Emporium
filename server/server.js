@@ -36,16 +36,18 @@ mongoose.connect(process.env.DB_CONNECTION_STRING);
 const categories = require('./routes/categories.js');
 const products = require('./routes/products.js');
 const orders = require('./routes/orders.js');
-const users = require('./routes/users.js');
+const auth = require('./routes/auth.js');
 const address = require('./routes/address.js');
+const uploadPhotos = require('./routes/uploadPhotos.js')
 
 
 
 app.use(`${api}/categories`,categories);
 app.use(`${api}/products`,products);
-app.use(`${api}/users`,users);
+app.use(`${api}/auth`,auth);
 app.use(`${api}/address`,address);
 app.use(`${api}/orders`,orders);
+app.use(`${api}/upload`,uploadPhotos);
 
 
 
