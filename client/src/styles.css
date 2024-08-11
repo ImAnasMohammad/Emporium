@@ -36,7 +36,9 @@ body{
     scrollbar-gutter: stable both-edges;
     width: 100%;
 }
-
+.mb-3{
+    padding: 10px 0px;
+}
 a{
     text-decoration: none !important;
 }

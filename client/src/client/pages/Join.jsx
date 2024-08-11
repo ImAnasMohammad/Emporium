@@ -30,11 +30,12 @@ const Join = () => {
           toast.success("Login successful");
           let data = {
             name:res.data?.name ?? '',
-            token:res.data?.token ?? ''
+            token:res.data?.token ?? '',
+            isAdmin:res.data?.isAdmin ?? false
           }
           setAuth(prev=>prev={...data})
-          localStorage.setItem("auth",JSON.stringify(data));
-          redirect('/')
+          localStorage.setItem("auth",JSON.stringify({...data}));
+          redirect(`${data?.isAdmin?'/admin/dashboard':'/'}`)
         }else{
           toast.error(res?.data?.msg ?? "Invalid details")
         }

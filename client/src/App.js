@@ -26,11 +26,16 @@ import Customers from './admin/pages/Customers'
 import Categories from "./admin/pages/Categories";
 import Inventory from "./admin/pages/Inventory";
 import ProductCreateEdit from "./admin/pages/ProductCreateEdit";
+
+
 import RequestOTP from "./client/pages/RequestOTP";
 import UpdatePassword from "./client/pages/UpdatePassword";
-import Profile from "./client/pages/Users/Profile";
 import PrivateAuthRoute from "./PrivateRoute/PrivateAuthRoute";
 import PublicAuthRoute from "./PrivateRoute/PublicAuthRoute";
+import ContactedUs from "./admin/pages/ContactedUs";
+import Orders from "./admin/pages/Orders";
+import OrderReceived from "./client/pages/Users/OrderReceived";
+import SingleOrder from "./admin/pages/SingleOrder";
 
 
 
@@ -56,10 +61,10 @@ function App() {
       {/* Routes for user  */}
       <Route path="/profile" element={<PrivateAuthRoute/>}>
         
-        <Route path="" element={<Profile/>}/>
         <Route path="check-out" element={<CheckOut/>}/>
         <Route path="address" element={<ShipmentAddress/>}/>
         <Route path="my-orders" element={<MyOrders/>}/>
+        <Route path="order-received/:id" element={<OrderReceived/>}/>
 
         <Route path="edit-personal-information" element={<PersonalInformation/>}/>
         <Route path="edit-payment-information" element={<PaymentInformation/>}/>
@@ -68,12 +73,15 @@ function App() {
       </Route>
 
       {/* Routes for admin */}
-      <Route path="/admin" element={<PrivateAuthRoute/>}>
+      <Route path="/admin" element={<PrivateAuthRoute isAdmin={true}/>}>
         <Route path="dashboard" element={<Dashboard/>}/>
         <Route path="categories" element={<Categories/>}/>
         <Route path="inventory" element={<Inventory/>}/>
         <Route path="inventory/product/:id?" element={<ProductCreateEdit/>}/>
         <Route path="customers" element={<Customers/>}/>
+        <Route path="orders" element={<Orders/>}/>
+        <Route path="orders/:id" element={<SingleOrder/>}/>
+        <Route path="logout" element={<Logout/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>
     </Routes>

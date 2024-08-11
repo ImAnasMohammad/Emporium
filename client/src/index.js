@@ -6,27 +6,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 import { ValidateEmailProvider } from './context/useValidateEmail';
 import { AuthProvider } from './context/useAuth';
+import { CartProvider } from './context/useCart';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <BrowserRouter>
     <AuthProvider>
-      <React.StrictMode>
-        <ValidateEmailProvider>
-            <ToastContainer position="bottom-center"
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-            />
-            <App />
-        </ValidateEmailProvider>
-      </React.StrictMode>
+        <CartProvider>
+            <ValidateEmailProvider>
+                <ToastContainer position="bottom-center"
+                    autoClose={2000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="dark"
+                />
+                <App />
+            </ValidateEmailProvider>
+        </CartProvider>
     </AuthProvider>
   </BrowserRouter>
 );

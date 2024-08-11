@@ -39,6 +39,9 @@ const orders = require('./routes/orders.js');
 const auth = require('./routes/auth.js');
 const address = require('./routes/address.js');
 const uploadPhotos = require('./routes/uploadPhotos.js')
+const contact = require('./routes/contact-us.js')
+const cart = require('./routes/cart.js')
+const users = require('./routes/users.js')
 
 
 
@@ -48,6 +51,9 @@ app.use(`${api}/auth`,auth);
 app.use(`${api}/address`,address);
 app.use(`${api}/orders`,orders);
 app.use(`${api}/upload`,uploadPhotos);
+app.use(`${api}/contact`,contact);
+app.use(`${api}/cart`,cart);
+app.use(`${api}/users`,users);
 
 
 

@@ -27,16 +27,16 @@ const   SearchLayout = (
       </SortModel>
       <div className='search-layout-wrapper'>
         <div style={{display:'flex',gap:'10px'}}>
-          <div className='search-bar-wrapper'>
-              <i class="bi bi-search"></i>
-              <input type="text"
-                  value={search}
-                  onChange={(e)=>setSearch(e.target.value)}
-                  placeholder='Search'
-                  />
-          </div>
-          <button onClick={toggleSortModel} className='custom-primary-btn add-btn' ><i class="bi bi-filter-left"></i>Sort</button>
-          <button onClick={handleCreateClick} className='custom-primary-btn add-btn' ><i class="bi bi-plus"></i>{btnLabel}</button>
+            <div className='search-bar-wrapper'>
+                <i class="bi bi-search"></i>
+                <input type="text"
+                    value={search}
+                    onChange={(e)=>setSearch(e.target.value)}
+                    placeholder='Search'
+                />
+            </div>
+            <button onClick={toggleSortModel} className='custom-primary-btn add-btn' ><i class="bi bi-filter-left"></i>Sort</button>
+            {btnLabel && <button onClick={handleCreateClick} className='custom-primary-btn add-btn' ><i class="bi bi-plus"></i>{btnLabel}</button>}
         </div>
       </div>
     </>

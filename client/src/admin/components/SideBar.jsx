@@ -32,9 +32,9 @@ const SideBar = ({children,page}) => {
       label:'Inventory'
     },
     {
-      icon:'bi bi-hand-thumbs-up',
-      to:'/admin/feedbacks',
-      label:'Feedbacks'
+      icon:'bi bi-person-lines-fill',
+      to:'/admin/contacted-us',
+      label:'Contacted us'
     },
     {
       icon:'bi bi-gear',
@@ -63,7 +63,7 @@ const SideBar = ({children,page}) => {
           }
         </div>
       </div>
-      <NavLink className="nav_link" to='/admin/sign-out' activeClass='active'>
+      <NavLink className="nav_link" to='/profile/logout' activeClass='active'>
         <i className="bi bi-box-arrow-right nav_icon"></i>
         <span className="nav_name">SignOut</span>
       </NavLink>

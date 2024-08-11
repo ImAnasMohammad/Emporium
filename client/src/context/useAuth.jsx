@@ -17,6 +17,7 @@ const AuthProvider = ({ children }) => {
       const [auth, setAuth] = useState({
         name:'',
         token:'', //token for auth
+        isAdmin:false
       });
 
       //default axios
@@ -26,11 +27,10 @@ const AuthProvider = ({ children }) => {
 
             const data = localStorage.getItem('auth');
             if(data){
-                  const {name,token} = JSON.parse(data);
+                  const {name,token,isAdmin} = JSON.parse(data);
                   
-                  setAuth({...auth,name,token})
+                  setAuth({...auth,name,token,isAdmin})
             }
-            // eslint-disable 
       },[])
 
       return (

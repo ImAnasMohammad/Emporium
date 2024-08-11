@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Modal from 'react-bootstrap/Modal';
 import Layout from '../Layouts/Layout'
 import SearchLayout from '../Layouts/SearchLayout';
 import Table from '../Layouts/Table';
@@ -9,7 +8,7 @@ import axios from 'axios';
 import ConformationModel from '../components/ConformationModel';
 import { useNavigate } from 'react-router-dom';
 import LazyLoadImage from '../components/LazyLoadImage';
-import formatCurrency from '../../utils/formatCurrency';
+import { formatCurrency } from '../../utils/format';
 const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 

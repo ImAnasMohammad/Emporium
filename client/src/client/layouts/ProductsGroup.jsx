@@ -2,7 +2,7 @@ import React from 'react';
 import '../assets/css/layouts/ProductsGroup.css'
 import { Link } from 'react-router-dom';
 import Animate from '../layouts/Animate';
-import { formatCurrency } from '../common/numberFormat';
+import { formatCurrency } from '../../utils/format';
 
 const ProductsGroup = ({heading,items,className,label}) => {
   return (

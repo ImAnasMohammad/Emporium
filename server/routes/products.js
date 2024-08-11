@@ -146,6 +146,8 @@ async function getProductById(req,res){
 
         if(!products) return res.json({success:false,msg:"Product not found"})
 
+        
+
         return res.json({success:true,data:products})
     }catch(err){
         console.log('error at Product - get by id',err);

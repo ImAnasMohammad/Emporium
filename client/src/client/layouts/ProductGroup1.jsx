@@ -2,7 +2,7 @@ import React from 'react'
 import '../assets/css/layouts/ProductGroup2.css'
 import Animate from './Animate'
 import { Link } from 'react-router-dom'
-import { formatCurrency } from '../common/numberFormat'
+import { formatCurrency } from '../../utils/format'
 import LazyLoadImage from '../../admin/components/LazyLoadImage'
 import img from '../assets/images/productsNotFound.jpg'
 
@@ -31,7 +31,7 @@ export const ProductGroup1 = ({heading,products,tag="",style,headingStyle}) => {
 const SingleProduct = ({item,tag,style})=>{
     const {price,discount} = item?.variations[0]
     return<Animate>
-        <Link to="/home">
+        <Link to={`/product/${item._id}`}>
             <div className="product-item">
                 {tag && <div style={style} className="tag">{tag}</div>}
                 <LazyLoadImage

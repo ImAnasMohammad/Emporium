@@ -6,20 +6,17 @@ const jwt = require('jsonwebtoken');
 const isValidObjectId = require('../utils/validateObjectId.js');
 const sendMailOTP = require('../utils/sendMail.js');
 const router = express.Router();
-const userAuthMiddleware = require('../middlewares/userAuthMiddleware.js')
+const authMiddleware = require('../middlewares/authMiddleware.js')
 
 // all categories routes
-router.get('/',getAllUsers);
-router.get('/verify-token',userAuthMiddleware,verifyToken);
-router.get('/verify-admin-token',userAuthMiddleware,verifyAdminToken);
+router.get('/verify-token',authMiddleware,verifyToken);
+router.get('/verify-admin-token',authMiddleware,verifyAdminToken);
 router.post('/register',createUser);
 router.post('/login',authUser);
 router.post('/generate-otp',generateOTP);
 router.post('/verify-otp',verifyOTP);
 router.post('/update-password',updatePassword);
-// router.get('/:id',getUserByNameRId);
-// router.delete('/:id',deleteUser);
-// router.put('/:id',updateUser);
+
 
 
 
@@ -47,7 +44,11 @@ function verifyToken(req,res){
 
 function verifyAdminToken(req,res){
     try{
-        console.log(req.body)
+        console.log(req?.user)
+        if(req?.user?.isAdmin){
+            return res.send({success:true})
+        }
+        return res.status(403).json({success:false,msg:"Unauthorized user"});
     }catch(err){
         console.log("Error at -",err);
         res.json({success:false,msg:err?.message ?? "Something went wrong"})
@@ -76,8 +77,7 @@ async function authUser(req,res){
             isAdmin:user.isAdmin
         },key,{expiresIn:'7d'});
 
-
-        return res.status(200).json({success:true,token,name:user.name});
+        return res.status(200).json({success:true,token,name:user.name,isAdmin:user.isAdmin});
         
     }catch(err){
         console.log("Error occur at users auth"+err)
@@ -194,39 +194,6 @@ async function verifyOTP(req,res){
     }
 }
 
-// get all users 
-async function getAllUsers (req,res){
-    try{
-        const users = await User.find();
-        if(!users){
-            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:users})
-        }
-    }catch(err){
-        console.log("error at users - get ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
-    }
-}
-
-//get user by id
-async function getUserByName(req,res){
-    try{
-
-        const {search} = req.params;
-        if(!search) return res.json({success:false,msg:'Search is empty'});
-
-
-        let users = await User.find({name:search});
-
-        if(!users) return res.json({success:false,msg:"User not found"})
-
-        return res.json({success:true,data:users})
-    }catch(err){
-        console.log('error at User - get by search',err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
-    }
-}
 
 // create product 
 async function createUser(req,res){
@@ -253,42 +220,6 @@ async function createUser(req,res){
 }
 
 
-//delete product
-async function deleteUser(req,res){
-    try{
-
-        if(!req.params.id)return res.json({success:false,msg:'Invalid Product Id'});
-        let deleteProduct = await Product.findByIdAndDelete(req.params.id)
-        
-        if(!deleteProduct) return res.json({success:false,msg:'Product cannot be deleted'})
-    
-        return res.json({success:true,msg:"Product deleted successfully.."})
-    }catch(err){
-        console.log("error at Product - delete ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
-    }
-}
-
-
-//update product
-async function updateUser(req,res){
-    try{
-
-        if(!req.params.id)return res.json({success:false,msg:'Invalid Product Id'});
-        let msg = validateProductData(req.body);
-        
-        if(msg) return res.json({success:false,msg});
-
-        let updatedProduct = await Product.findByIdAndUpdate(req.params.id,{...req.body})
-        
-        if(!updatedProduct) return res.json({success:false,msg:'Product cannot be updated'})
-    
-        return res.json({success:true,msg:"Product updated successfully.."})
-    }catch(err){
-        console.log("error at product - update ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
-    }
-}
 
 
 module.exports= router

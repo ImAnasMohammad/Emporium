@@ -27,3 +27,7 @@
     text-transform: uppercase;
     letter-spacing: 1.2px;
 }
+
+.custom-input-wrapper input:disabled{
+    background-color: rgb(212, 212, 212);
+}

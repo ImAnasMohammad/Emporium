@@ -5,17 +5,16 @@ const secretKey = process.env.JWT_KEY; // You should store this securely in envi
 function jwtMiddleware(req, res, next) {
       try{
             const token = req.headers.authorization;
-            console.log(token)
             if (token){
-                  jwt.verify(token, secretKey, (err, user) => {
-                        if (err) {
-                              return sendResponse(res,403,{success:false}) // Invalid token
-                        }
-                        req.user = user; // Attach user info to request
-                        next(); // Proceed to the next middleware or route handler
-                  });
-            } else {
-                  sendResponse(res,401,{success:false}) // No token provided
+                jwt.verify(token, secretKey, (err, user) => {
+                    if (err) {
+                        return sendResponse(res,403,{success:false,message:err.message,name:err.name}) // Invalid token
+                    }
+                    req.user = user;
+                    next();
+                });
+            }else {
+                sendResponse(res,401,{success:false,msg:'Token must be required'}) // No token provided
             }
 
       }catch(err){

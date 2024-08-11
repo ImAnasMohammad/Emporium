@@ -46,7 +46,10 @@ const Navbar = () => {
               <NavLink  to='/products'>Products</NavLink>
             </li>
             <li>
-              <NavLink  to={`${auth?.token && auth?.name ?'/profile/my-orders':'/join'}`}>My Orders</NavLink>
+              <NavLink  to={`${auth?.token && auth?.name ?auth?.isAdmin?'/admin/dashboard':'/profile/my-orders':'/join'}`}>
+                {auth?.isAdmin ?'Dashboard':'My Orders'}
+                {console.log(auth)}
+              </NavLink>
             </li>
             <li>
               <NavLink to='/contact-us'>Contact Us</NavLink>

@@ -17,6 +17,14 @@ const orderItemSchema = mongoose.Schema({
     quantity:{
         type:Number,
         require:true,
+    },
+    variation:{
+        type:String,
+        require:true,
+    },
+    status:{
+        type:Number,
+        default:1
     }
 });
 

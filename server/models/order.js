@@ -10,11 +10,16 @@ const orderSchema = mongoose.Schema({
         ref:'OrderItem',
         require:true
     }],
-    street:[{
+    phone:{
         type:String,
         default:''
-    }],
+    },
     address:{
+        type:String,
+        default:'',
+        required:true
+    },
+    landMark:{
         type:String,
         default:'',
         required:true
@@ -33,7 +38,7 @@ const orderSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    pinCode:{
+    pincode:{
         type:Number,
         required:true
     },

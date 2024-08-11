@@ -10,10 +10,14 @@ const Address = mongoose.Schema({
         ref:'User',
         required:true   
     },
-    street:[{
+    phone:{
         type:String,
         default:''
-    }],
+    },
+    landMark:{
+        type:String,
+        default:''
+    },
     address:{
         type:String,
         default:'',

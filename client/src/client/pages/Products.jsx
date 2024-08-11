@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../common/Layout'
 import { ProductGroup1 } from '../layouts/ProductGroup1'
-import { FaAngleDown } from "react-icons/fa6";
 import '../assets/css/pages/products.css'
 import { useParams } from 'react-router-dom';
 import axios from 'axios';

@@ -1,41 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import img1 from '../assets/images/p1.webp'
-import img2 from '../assets/images/p2.webp'
-import img3 from '../assets/images/p.png'
-import { formatCurrency } from '../common/numberFormat';
+import { formatCurrency } from '../../utils/format';
 import '../assets/css/layouts/Cart.css'
 import Animate from './Animate';
+import LazyLoadImage from '../../admin/components/LazyLoadImage';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/useCart';
 
-const Cart = ({openCart,setOpenCart,items}) => {
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
+
+
+const Cart = ({openCart,setOpenCart}) => {
+
+    
     const handleClose = ()=> setOpenCart(false);
+    const {loading,total,cart,removeCartItem} = useCart();
 
-    const cartItems = [
-      {
-        name:'shfkjdfkjsfh dsb fsfs',
-        price:'2200',
-        img:img1,
-        variation:'M'
-      },
-      {
-        name:'shfkjdfkjsfh dsb  sfsd s sd f fsfs',
-        price:'200200',
-        img:img2
-      },
-      {
-        name:'shfkjdsfsd fsfsffkjsfh dsb fsfs',
-        price:'2200',
-        img:img3,
-        variation:'M'
-      },
-      {
-        name:'shfkjdfkjsfh dsb fsfs',
-        price:'2200',
-        img:img1,
-        variation:'XXL'
-      },
-    ]
+
+    const redirect = useNavigate();
 
   return (
     <Offcanvas show={openCart} onHide={handleClose} placement='end'>
@@ -46,15 +30,37 @@ const Cart = ({openCart,setOpenCart,items}) => {
           <div className="cart-wrapper">
             <div className="cart-body">
               {
-                cartItems?.map((item,index)=><CartItem item={item} key={index}/>)
+                cart?.map((item,index)=><Animate><CartItem item={item}  key={index} removeCartItem={removeCartItem}/></Animate>)
               }
+              <div className="loading-wrapper" style={{
+                  width:'100%',
+                  height:'100%',
+                  display:'flex',
+                  justifyContent:'center',
+                  alignItems:'center',
+                  flexDirection:'column',
+                  gap:'10px'
+                }}>
+                  
+                {
+                  loading && "Loading..."
+                }
+                {
+                  !loading && !cart?.length && "Cart is empty"
+                }
+                  
+                </div>
             </div>
             <div className="cart-fotter">
-              <div className="sub-cost-wrapper">
-                <span>Sub cost</span>
-                <span>{formatCurrency(22000)}</span>
-              </div>
-              <button className="btn btn-primary">Check Out</button>
+              { cart?.length>0 &&
+                <>
+                  <div className="sub-cost-wrapper">
+                    <span>Sub cost</span>
+                    <span>{formatCurrency(total )}</span>
+                  </div>
+                  <button className="btn btn-primary"onClick={()=>redirect('/profile/check-out')}>Check Out</button>
+                </>
+              }
             </div>
           </div>
         </Offcanvas.Body>
@@ -62,18 +68,44 @@ const Cart = ({openCart,setOpenCart,items}) => {
   )
 }
 
-const CartItem = ({item})=>{
+const CartItem = ({item,removeCartItem})=>{
+
+    const {
+        cartId,
+        variation,
+        name,
+        image,
+        brand,
+        price,
+        discount,
+        discountedPrice,
+    } = item;
+  
+    
     return<div className="cart-item">
         <div className="cart-item-wrapper">
-          <img src={item?.img} alt={item?.name} />
+          <LazyLoadImage
+            blurHash={image?.blurHash}
+            src={`${serverURL}/upload/${image?.name}`}
+          />
         </div>
         <div className="cart-item-content">
-            <p>{item?.name}</p>
+          <div>
+          <p>{name}</p>
             {
-              item?.variation && <p>{item?.variation}</p>
+              item?.variation && <p>{variation}</p>
             }
+            <span style={{margin:'10px 0px'}}>{formatCurrency(discountedPrice)}</span>
+          </div>
+            <button
+              className='btn btn-secondary remove-item-cart-btn'
+              style={{display:'flex',gap:'5px',justifyContent:'center',alignItems:'center'}}
+              onClick={()=>removeCartItem(cartId)}>
+              <RiDeleteBin6Line/>
+              Remove
+            </button>
         </div>
       </div>
 }
 
-export default Cart
+export default Cart;

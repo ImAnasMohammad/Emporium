@@ -1,65 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../Layouts/Layout'
 import SearchLayout from '../Layouts/SearchLayout';
 import Table from '../Layouts/Table';
-import { formattedNumber } from '../utils/formatCurrency';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { formatCurrency, formatDate } from '../../utils/format';
+
+
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const Orders = () => {
   const [search,setSearch] = useState('');
   const [sortBy,setSortBy] = useState(0);
+  const [orders,setOrders] = useState([]);
+  const [loading,setLoading] = useState(false);
   const [show,setShow] = useState(false);
 
-  const tableHeadings = ["Name","Email","Phone","Total Trips","Total Bill","Paid Bill",'Due Bill'];
-
-  const data = [
-    {
-      "name": "Alice Atkins",
-      "phone": "(340) 284-3245",
-      "email": "convallis.erat.eget@google.net",
-      "bill": 6806,
-      "dueBill": 7274,
-      "paidBill": 3310,
-      "trips":2
-    },
-    {
-      "name": "Nyssa Thornton",
-      "phone": "(812) 907-7834",
-      "email": "donec.luctus@icloud.edu",
-      "bill": 7102,
-      "dueBill": 1935,
-      "paidBill": 9771,
-      "trips":23
-    },
-    {
-      "name": "Farrah Stevenson",
-      "phone": "(737) 551-5659",
-      "email": "fringilla.porttitor@icloud.ca",
-      "bill": 7748,
-      "dueBill": 4735,
-      "paidBill": 6637,
-      "trips":23
-    },
-    {
-      "name": "Holmes Rose",
-      "phone": "1-769-641-2756",
-      "email": "hymenaeos.mauris@aol.couk",
-      "bill": 5901,
-      "dueBill": 2968,
-      "paidBill": 8184,
-      "trips":32
-    },
-    {
-      "name": "Branden Sims",
-      "phone": "(768) 387-9643",
-      "email": "et@outlook.edu",
-      "bill": 2887,
-      "dueBill": 3687,
-      "paidBill": 9487,
-      "trips":0
-    }
-  ]
+  const tableHeadings = ["Order Id","Name","Phone","Total Items","Total Bill",'Order Date','Order Status'];
 
   const handleSearch = (e)=>{
     setSearch(e.target.value);
@@ -73,16 +32,41 @@ const Orders = () => {
   const handleSortClick = ()=>{
     setShow(prev=>!prev)
   }
+
+  const getAllOrders = async()=>{
+    try{
+        setLoading(true);
+        const res = await axios.get(`${serverURL}/orders/getAllOrders`);
+        if(res?.data?.success){
+            setOrders(res?.data?.data);
+            
+        }else{
+            toast.error(res?.data.msg?? "Something went wrong.");
+        }
+
+    }catch(err){
+        console.error(err);
+        toast.error(err.message ?? err.response.data.msg ?? "Something went wrong.")
+
+    }finally{
+        setLoading(false);
+    }
+  }
+
+  useEffect(()=>{
+    getAllOrders();
+
+  },[]);
   return (
     <>
     
-    <SortModel show={show} setShow={setShow}/>
-    <Layout page='Customers'>
-        <SearchLayout search={search} handleSearch={handleSearch} handleClick={handleClick} btnLabel={'New Customer'} handleSortClick={handleSortClick}/>
-        <Table headings={tableHeadings}>
-          <AllRows data={data}/>
-        </Table>
-    </Layout>
+        <SortModel show={show} setShow={setShow}/>
+        <Layout page='Customers' isLoading={loading} >
+            <SearchLayout search={search} handleSearch={handleSearch} handleClick={handleClick} btnLabel={''} handleSortClick={handleSortClick}/>
+            <Table headings={tableHeadings}>
+                <AllRows data={orders}/>
+            </Table>
+        </Layout>
     </>
   )
 }
@@ -96,14 +80,38 @@ const AllRows = ({data}) =>{
 }
 
 const SingleRow = ({data})=>{
+    console.log(data)
   return <tr>
-    <td>{data?.name}</td>
-    <td><Link to={`mailto:${data?.email}`}>{data?.email}</Link></td>
+    <td style={{maxWidth:'100px',overflow:'hidden',textOverflow:"ellipsis",whiteSpace:'nowrap'}}>
+        <Link to={`${data._id}`}>{data?._id}</Link>
+    </td>
+    <td>{data?.userId?.name}</td>
     <td><Link to={`tel:+${data?.phone}`}>+{data?.phone}</Link></td>
-    <td>{data?.trips}</td>
-    <td className='color-blue'>{formattedNumber(data?.bill)}</td>
-    <td className='color-green'>{formattedNumber(data?.paidBill)}</td>
-    <td className='color-red'>{formattedNumber(data?.dueBill)}</td>
+    <td>{data?.items}</td>
+    <td className='color-green'>{formatCurrency(data?.totalPrice)}</td>
+    <td>
+        {formatDate(data?.dateOrder)}
+    </td>
+    <td>
+        <select name="" id="" style={{padding:'5px'}}>
+            <option value="0">Pending</option>
+            <option value="1">Packed</option>
+            <option value="2">Delivered</option>
+            <option value="3">Cancelled</option>
+            <option value="4">Returned</option>
+            <option value="5">Refunded</option>
+            <option value="6">Partially Paid</option>
+            <option value="7">Partially Delivered</option>
+            <option value="8">Partially Returned</option>
+            <option value="9">Partially Refunded</option>
+            <option value="10">Completed</option>
+            <option value="11">Failed</option>
+            <option value="12">Cancelled (Return Requested)</option>
+            <option value="13">Returned (Return Requested)</option>
+            <option value="14">Refunded (Return Requested)</option>
+        </select>
+    </td>
+    
   </tr>
 }
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Layout from '../Layouts/Layout'
 import SearchLayout from '../Layouts/SearchLayout';
 import Table from '../Layouts/Table';
-import { formattedNumber } from '../utils/formatCurrency';
+import { formatCurrency } from '../../utils/format';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 
@@ -101,9 +101,9 @@ const SingleRow = ({data})=>{
     <td><Link to={`mailto:${data?.email}`}>{data?.email}</Link></td>
     <td><Link to={`tel:+${data?.phone}`}>+{data?.phone}</Link></td>
     <td>{data?.trips}</td>
-    <td className='color-blue'>{formattedNumber(data?.bill)}</td>
-    <td className='color-green'>{formattedNumber(data?.paidBill)}</td>
-    <td className='color-red'>{formattedNumber(data?.dueBill)}</td>
+    <td className='color-blue'>{formatCurrency(data?.bill)}</td>
+    <td className='color-green'>{formatCurrency(data?.paidBill)}</td>
+    <td className='color-red'>{formatCurrency(data?.dueBill)}</td>
   </tr>
 }
 
