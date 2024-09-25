@@ -4,17 +4,19 @@ const { Order} = require('../models/order.js');
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware.js')
+const adminMiddleware = require('../middlewares/adminMiddleware.js')
 
 // all order routes
 
 // all get routes for order
-router.get('/getAllOrders/:sort?',authMiddleware,getAllOrders);
+router.get('/getAllOrders/:page?/:limit?/:sort?',authMiddleware,adminMiddleware,getAllOrders);
+router.get('/getMyOrders/:page?/:limit?/:sort?',authMiddleware,getMyOrders);
 
 router.post('/',authMiddleware,createOrder);
-router.get('/:id',authMiddleware,getOrdersById);
-router.delete('/:id',deleteOrders);
-router.put('/:id',updateOrder);
-router.post('/changeStatus',changeOrderStatus);
+router.get('/:id',authMiddleware,adminMiddleware,getOrdersById);
+// router.delete('/:id',deleteOrders);
+router.put('/updateStatus/:id',changeOrderStatus);
+// router.post('/changeStatus',changeOrderStatus);
 
 
 function validateOrdersData(obj){
@@ -59,23 +61,94 @@ function validateOrdersData(obj){
 
 
 // get all Orders 
+async function getMyOrders(req, res) {
+    try {
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+        const sort = req.params.sort == 1 ? 1 : -1;
+
+        const userId = req.user.userId; // Ensure userId is defined
+
+        const totalOrders = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const orders = await Order.find({ userId })
+            .populate({
+                path: 'orderItems',
+                populate: {
+                    path: 'product', // Ensure 'product' is a valid path in your OrderItem schema
+                    select: 'name image' // Select the fields you need from the Product model
+                }
+            })
+            .sort({ 'dateOrder': sort })
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        if (!orders) {
+            return res.status(500).json({ success: false, msg: 'Internal server error' });
+        }
+
+        const data = orders.map(order=>{
+            return order?.orderItems.map(item=>({
+                variation: item.variation,
+                price: item?.price,
+                quantity:item?.quantity,
+                product: item?.product,
+                id:item?._id,
+                status: order?.status,
+                dateOrder: order?.dateOrder,
+            }))
+        })
+        return res.json({
+            success: true,
+            data:data?.flat(),
+            currentPage: page,
+            totalPages,
+            totalOrders
+        });
+    } catch (err) {
+        console.log("error at Orders - get my orders", err);
+        return res.status(500).json({ success: false, msg: "Internal server error" });
+    }
+}
+
 async function getAllOrders (req,res){
     try{
-        const sort = req.params.sort==1?1 : -1;
-        // const orders = await Order.find({items:{$size:'$orderItems'}}).select('_id ').populate('userId','name _id').sort({'dateOrder':sort});
-        const orders = await Order.find({},
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+        const sort = req.params.sort == 1 ? 1 : -1;
+
+        const totalOrders = await Order.countDocuments();
+        const cancelRequests = await Order.countDocuments({status:3});
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const orders = await Order.find(
+            {},
             {
-                items:{$size:'$orderItems'},
-                phone:1,
-                totalPrice:1,
-                dateOrder:1,
-                status:1,
-                userId:1
-            }).populate('userId','name').sort({'dateOrder':sort});
-        if(!orders){
-            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
+                items: { $size: '$orderItems' },
+                phone: 1,
+                totalPrice: 1,
+                dateOrder: 1,
+                status: 1,
+                userId: 1
+            }
+        )
+        .populate('userId', 'name')
+        .sort({ 'dateOrder': sort })
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+        if (!orders) {
+            return res.status(500).json({ success: false, msg: 'Internal server error' });
         }
-        return res.json({success:true,data:orders})
+        return res.json({
+            success: true,
+            data: orders,
+            currentPage: page,
+            totalPages,
+            totalOrders,
+            cancelRequests
+        });
     }catch(err){
         console.log("error at Orderss - get - all ",err);
         return res.status(500).json({success:false,msg:"Internal server error"})
@@ -116,7 +189,8 @@ async function getOrdersById(req,res){
 async function changeOrderStatus(req,res){
     try{
 
-        const {status,id} = req.body
+        const {id} = req.params;
+        const {status} = req.body
         if(!id) return res.json({success:false,msg:'Orders ID is empty'});
 
         if(!status) return res.json({success:false,msg:'Status cannot be empty'});
@@ -140,36 +214,36 @@ async function createOrder(req,res){
     try{
         const userId = req.user.userId;
         let msg = validateOrdersData({...req.body,userId});
+        console.log(msg)
         if(msg) return res.json({success:false,msg});
-
+        
         let totalPrice = 0;
-
+        
         const orderItems = req.body.orderItems;
-
-
-        let reduceItemsResolve = Promise.all(orderItems.map(async (item)=>{
-            return await Product.updateOne(
-                { _id: item.productId, "variations._id": item.variationId },
+        
+        let orderItemsSolved = await  Promise.all(orderItems.map(async (item)=>{
+            const result = await Product.find({_id:item.productId,"variations._id":item.variationId},{"variations.$":1});
+            if( result[0].variations[0]?.quantity<=0 ) return false;
+            await Product.updateOne(
+                { _id: item.productId, "variations._id": item.variationId,"variations.quantity": { $gte: 1 } },
                 { $inc: { "variations.$.quantity": -1 } },
             );
-          
-        }))
-        await reduceItemsResolve;
 
-
-        let orderItemsUnResolveIds = Promise.all(orderItems.map(async (item)=>{
             let newOrderItem = new OrderItem({
                 product:item.productId,
                 price:item.discountedPrice,
-                quantity:item.quantity,
+                quantity:1,
                 variation:item.variation
             });
+
             totalPrice+=item.discountedPrice;
             newOrderItem= await newOrderItem.save();
             return newOrderItem?._id
+          
         }))
 
-        let orderItemsSolved = await orderItemsUnResolveIds;
+        orderItemsSolved = orderItemsSolved?.filter(item=>item!==false);
+
 
         const {
             address,
@@ -197,7 +271,7 @@ async function createOrder(req,res){
         newOrder = await newOrder.save();
     
         if(!newOrder) return res.json({success:false,msg:"Orders cannot be created"});
-        return res.json({success:true,id:newOrder._id})
+        return res.json({success:true,id:newOrder._id,msg:orderItemsSolved?.length !== orderItems?.length && "Some items are ignored"})
     }catch(err){
         console.log("error at Orders - post ",err);
         return res.status(500).json({success:false,msg:"Internal server error"})

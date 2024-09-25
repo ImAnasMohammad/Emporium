@@ -1,65 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../Layouts/Layout'
 import SearchLayout from '../Layouts/SearchLayout';
 import Table from '../Layouts/Table';
 import { formatCurrency } from '../../utils/format';
 import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+
+const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
 
 const Customers = () => {
   const [search,setSearch] = useState('');
   const [sortBy,setSortBy] = useState(0);
   const [show,setShow] = useState(false);
+  const [users,setUsers] = useState({});
+  const [loading,setLoading] = useState(false);
 
   const tableHeadings = ["Name","Email","Phone","Total Trips","Total Bill","Paid Bill",'Due Bill'];
 
-  const data = [
-    {
-      "name": "Alice Atkins",
-      "phone": "(340) 284-3245",
-      "email": "convallis.erat.eget@google.net",
-      "bill": 6806,
-      "dueBill": 7274,
-      "paidBill": 3310,
-      "trips":2
-    },
-    {
-      "name": "Nyssa Thornton",
-      "phone": "(812) 907-7834",
-      "email": "donec.luctus@icloud.edu",
-      "bill": 7102,
-      "dueBill": 1935,
-      "paidBill": 9771,
-      "trips":23
-    },
-    {
-      "name": "Farrah Stevenson",
-      "phone": "(737) 551-5659",
-      "email": "fringilla.porttitor@icloud.ca",
-      "bill": 7748,
-      "dueBill": 4735,
-      "paidBill": 6637,
-      "trips":23
-    },
-    {
-      "name": "Holmes Rose",
-      "phone": "1-769-641-2756",
-      "email": "hymenaeos.mauris@aol.couk",
-      "bill": 5901,
-      "dueBill": 2968,
-      "paidBill": 8184,
-      "trips":32
-    },
-    {
-      "name": "Branden Sims",
-      "phone": "(768) 387-9643",
-      "email": "et@outlook.edu",
-      "bill": 2887,
-      "dueBill": 3687,
-      "paidBill": 9487,
-      "trips":0
-    }
-  ]
+  
 
   const handleSearch = (e)=>{
     setSearch(e.target.value);
@@ -73,6 +33,27 @@ const Customers = () => {
   const handleSortClick = ()=>{
     setShow(prev=>!prev)
   }
+
+
+  const getUsersData = async ()=>{
+    try{
+        setLoading(true);
+        const response = await axios.get(`${serverURL}/users`);
+        // setUsers(response.data);
+        console.log(response)
+
+    }catch(err){
+        console.error(err);
+        toast.error(err.response.data.message ?? err.message??'Something went wrong.')
+    }finally{
+        setLoading(false);
+    }
+  }
+
+
+  useEffect(()=>{
+    getUsersData();
+  },[])
   return (
     <>
     
@@ -80,7 +61,7 @@ const Customers = () => {
     <Layout page='Customers'>
         <SearchLayout search={search} handleSearch={handleSearch} handleClick={handleClick} btnLabel={'New Customer'} handleSortClick={handleSortClick}/>
         <Table headings={tableHeadings}>
-          <AllRows data={data}/>
+          <AllRows data={[]}/>
         </Table>
     </Layout>
     </>

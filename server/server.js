@@ -54,7 +54,7 @@ app.use(`${api}/upload`,uploadPhotos);
 app.use(`${api}/contact`,contact);
 app.use(`${api}/cart`,cart);
 app.use(`${api}/users`,users);
-
+app.get('/',(req,res)=>res.send("hello"))
 
 
 //server start listing 

@@ -189,3 +189,29 @@ a{
 .progress-bar-line span.activated::before{
     background-color: var(--primaryBGColor);
 }
+
+
+.pagination-wrapper{
+    display: flex;
+    margin: 10px 0px;
+    justify-content: center;
+    gap:10px;
+    flex-wrap: wrap;
+    width: 100%;
+    right:0;
+
+    button{
+        padding: 10px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        outline: none;
+        border:1px solid rgb(205, 205, 205);
+    }
+
+    button.active{
+        background-color: var(--primaryBGColor);
+        color: var(--color);
+        border:1px solid var(--primaryBGColor);
+    }
+}

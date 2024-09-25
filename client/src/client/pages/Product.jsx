@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {toast } from 'react-toastify';
 import LazyLoadImage from '../../admin/components/LazyLoadImage';
 import Layout from '../common/Layout';
@@ -55,6 +55,7 @@ const Product = () => {
   }
 
   useEffect(()=>{
+
     if( !id ){
       toast.error("Invalid Product id");
       redirect('/');
@@ -66,9 +67,10 @@ const Product = () => {
             const res = await axios.get(`${serverURL}/products/getProduct/${id}`);
 
             if(res.data?.success){
+                console.log(res?.data)
             let data = res.data.data;
-            data.images = data.images.filter(item=>item?.name !=='');
-            data.images.push(data.image);
+            data.images = data.images?.filter(item=>item?.name !=='');
+            data.images?.push(data.image);
             delete data.image;
             setProduct(prev=>prev=data)
         }else{
@@ -79,13 +81,18 @@ const Product = () => {
       }
     }
 
+    
+
     fetchProductData()
+
 
     
   },[])
   return (
-    <Layout>
-      {product ? (
+    <Layout key={'Product'}>
+      {!product ?  (
+        "Loading..."
+      ):(
         <section>
           <div className="main">
             <div className="default gallery">
@@ -129,8 +136,8 @@ const Product = () => {
                   product?.variations[activeVariationIndex]?.discount ?formatCurrency(product?.variations[activeVariationIndex]?.price-(product?.variations[activeVariationIndex]?.price*product?.variations[activeVariationIndex]?.discount)/100):
                   formatCurrency(product?.variations[activeVariationIndex]?.price)
                 }</span>
-                {product?.variations[activeVariationIndex]?.discount ? <span className="discount">{product?.variations[activeVariationIndex]?.discount}% off</span>:'' }
                 {product?.variations[activeVariationIndex]?.discount ? <span className="prev-price">{product?.variations[activeVariationIndex]?.price}</span> :'' }
+                {product?.variations[activeVariationIndex]?.discount ? <span className="discount" style={{minWidth:'fit-content'}}>{product?.variations[activeVariationIndex]?.discount}% off</span>:'' }
               </div>
               <div className="select-size">
                 {product?.variations?.map((variation,i)=><button key={variation?.variation} className={activeVariationIndex===i && 'active'} onClick={()=>setActiveVariationIndex(prev=>prev=i)}>{variation?.variation}</button>)}
@@ -161,8 +168,6 @@ const Product = () => {
             {<StringToHtml htmlString={product?.description} />}
           </p>
         </section>
-      ) : (
-        "Loading..."
       )}
     </Layout>
   );

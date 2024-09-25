@@ -48,7 +48,6 @@ const Navbar = () => {
             <li>
               <NavLink  to={`${auth?.token && auth?.name ?auth?.isAdmin?'/admin/dashboard':'/profile/my-orders':'/join'}`}>
                 {auth?.isAdmin ?'Dashboard':'My Orders'}
-                {console.log(auth)}
               </NavLink>
             </li>
             <li>
@@ -69,7 +68,7 @@ const Navbar = () => {
             </li>
             <li>
               {
-                auth?.name !=='' && auth?.token !=='' ?
+                auth?.token !=='' ?
                   <NavLink to= '/profile/logout' style={{color:'var(--color2)'}}>
                     <IoIosLogOut size={20}/>
                   </NavLink>

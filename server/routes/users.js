@@ -3,24 +3,54 @@ const { User } = require('../models/user');
 const { Address } = require('../models/address');
 
 const authMiddleware = require('../middlewares/authMiddleware.js')
+const adminMiddleware = require('../middlewares/adminMiddleware.js')
 
 const router = express.Router();
 
-router.get('/',getAllUsers);
+router.get('/',authMiddleware,adminMiddleware,getAllUsers);
 router.get('/shipping-details',authMiddleware,getShippingDetails);
 router.get('/:id',getUserByName);
-router.delete('/:id',deleteUser);
-router.put('/:id',updateUser);
+router.delete('/:id',authMiddleware,adminMiddleware,deleteUser);
+router.put('/:id',authMiddleware,updateUser);
 
 // get all users 
 async function getAllUsers (req,res){
     try{
-        const users = await User.find();
+        let users = await User.aggregate([
+            {
+                $lookup:{
+                    from:'orders',
+                    localField:'_id',
+                    foreignField:'userId',
+                    as:'order'
+                }
+            },
+            {
+                $unwind: "$orders"
+            },
+            {
+                
+                $group: {
+                    _id: "$_id",
+                    totalOrderPrice: { $sum: "$orders.totalPrice" },
+                    orderCount: { $sum: 1 }
+                }
+            },
+            {
+                $project:{
+                    name:1,
+                    mail:1,
+                    totalOrderCount:{$size:'$totalOrder'}
+                }
+            }
+        ]);
         if(!users){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:users})
         }
+
+
+        return res.json({success:true,data:users})
+        
     }catch(err){
         console.log("error at users - get ",err);
         return res.status(500).json({success:false,msg:"Internal server error"})

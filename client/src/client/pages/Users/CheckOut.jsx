@@ -53,10 +53,13 @@ const CheckOut = () => {
                 orderItems:cart
             })
             if(res.data?.success){
-                toast.success("Order placed successfully.");
+                console.log(res?.data?.msg)
+                toast.success(res?.data?.msg ?? "Order placed successfully.");
                 setIsSaved(true);
                 localStorage.setItem('orderId',res.data.id);
                 redirect('/profile/order-received/'+res.data.id);
+            }else{
+                toast.error(res.data?.msg?? "Something went wrong")
             }
         }catch(err){
             console.log(err);

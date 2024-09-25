@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const sendResponse = require('../utils/sendResponse');
-const secretKey = process.env.JWT_KEY; // You should store this securely in environment variables
-
+const secretKey = process.env.JWT_KEY; 
 function jwtMiddleware(req, res, next) {
       try{
             const token = req.headers.authorization;

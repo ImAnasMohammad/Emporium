@@ -32,11 +32,11 @@ const ValidateOTP = () => {
         let newOtp = [...otp]
         newOtp[i] = value
         setOtp(newOtp);
-        if(value) setActive(prev=>prev= prev<otpLength-1 ?prev+1:prev);
+        if(value) setActive(prev=>prev<=otpLength-1 ?prev+1:prev);
     }
 
     function handleKeyDown({key}){
-        if(key === 'Backspace') setActive(prev=>prev=prev>0 ?prev-1:prev);
+        if(key === 'Backspace') setActive(prev=>prev>=1?prev-1:0);
     }
 
     const handleSubmit = async (e)=>{
@@ -71,6 +71,7 @@ const ValidateOTP = () => {
     }
 
     useEffect(()=>{
+        console.log(ref)
         ref?.current?.focus()
     },[active])
 
@@ -106,12 +107,13 @@ const ValidateOTP = () => {
                             otp?.map((value,index)=>(
                                 <Input
                                     type="number"
-                                    extraAttributes={extraAttributes}
+                                    // extraAttributes={extraAttributes}
                                     onChange={(e)=>handleChange(e.target.value,index)}
                                     value={otp[index] ?? ''}
-                                    disabled={active === index? false:true}
+                                    // disabled={active === index? false:true}
                                     autoFocus={true}
-                                    reference={active === index? ref:null}
+                                    reference={active===index?ref:null}
+                                    onKeyUp={handleKeyDown}
                                     required={true}
                                 />)
                             )

@@ -29,23 +29,20 @@ const CartProvider = ({ children }) => {
             const res = await axios.get(`${serverURL}/cart`);
         
             if(res?.data?.success){
-            let items = res.data.data;
-            let tmpTotal = 0;
+                let items = res.data.data;
+                let tmpTotal = 0;
 
-            items = items.map(item=>{
-                
-                item.discountedPrice=item.discount>0?(item.price*(item.discount/100)):item.price;
-                tmpTotal += item.discountedPrice;
-                return item;
-            })
-            setCart(items);
-            setTotal(tmpTotal);
-            }else{
-                console.log(res.data.msg);
-                toast.error(res.data?.msg ?? "Something went wrong");
+                items = items.map(item=>{
+                    
+                    item.discountedPrice=item.discount>0?(item?.price - item.price*(item.discount/100)):item.price;
+                    tmpTotal += item.discountedPrice;
+                    return item;
+                })
+                setCart([...items]);
+                setTotal(tmpTotal);
             }
         }catch(err){
-            toast.error(err?.message ?? "Something went wrong");;
+            // toast.error(err?.message ?? "Something went wrong");
         }finally{
             setLoading(prev=>prev=false);
         }

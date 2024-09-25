@@ -3,12 +3,15 @@ const express = require('express');
 const { Product } = require('../models/product.js');
 const router = express.Router();
 
+const authMiddleware = require('../middlewares/authMiddleware.js')
+const adminMiddleware = require('../middlewares/adminMiddleware.js')
+
 // all categories routes
-router.get('/:sort?',getAllCategories);
+router.get('/',getAllCategories);
 router.get('/search/:search',getCategoryBySearch);
-router.post('/',createCategory);
-router.delete('/:id',deleteCategory);
-router.put('/:id',updateCategory);
+router.post('/',authMiddleware,adminMiddleware,createCategory);
+router.delete('/:id',authMiddleware,adminMiddleware,deleteCategory);
+router.put('/:id',authMiddleware,adminMiddleware,updateCategory);
 
 
 function validateCategoryData(obj){
@@ -27,10 +30,16 @@ function validateCategoryData(obj){
 
 
 // get all categories 
-async function getAllCategories (req,res){
+async function getAllCategories (req,res){  
     try{
-        const reqSort = req.params.sort ?? 0
-        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+
+        const {currentPage} = req.query ?? 1;
+        const limit = 10;
+        let {sort} = req.query ?? 0;
+        let {search} = req.query ?? '';
+
+        sort = (sort>=0 && sort<=3 ) ? sort : 0  ;
+        search = new RegExp(search, 'i');
 
         const sortList = [
             {'createAt':1},
@@ -39,14 +48,19 @@ async function getAllCategories (req,res){
             {'name':-1},
         ]
 
-
-        const categories = await Category.find().sort(sortList[sort]);
-
+        const categories = await Category.find({name:search})
+            .sort(sortList[sort])
+            .skip((currentPage - 1) * limit)
+            .limit(parseInt(limit));
         if(!categories){
             return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:categories})
         }
+
+        if(currentPage==1){
+            const total = await Category.countDocuments(search);
+            return res.json({success:true,data:categories,total,limit});
+        }
+        return res.json({success:true,data:categories})
     }catch(err){
         console.log("error at categories - get ",err);
         return res.status(500).json({success:false,msg:"Internal server error"})
@@ -60,8 +74,7 @@ async function getCategoryBySearch(req,res){
         const {search} = req.params;
         if(!search) return res.json({success:false,msg:'Search is empty'});
 
-        const regex = new RegExp(search, 'i'); // i means case insensitive
-
+        
         let categories = await Category.find({name:regex});
         if(!categories) return res.json({success:false,msg:"Category not found"})
 

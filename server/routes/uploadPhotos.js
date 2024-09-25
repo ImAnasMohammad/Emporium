@@ -6,6 +6,10 @@ const sharp = require('sharp');
 const { encode } = require('blurhash');
 const router = express.Router();
 
+const authMiddleware = require('../middlewares/authMiddleware.js')
+const adminMiddleware = require('../middlewares/adminMiddleware.js')
+
+
 
 // Create storage engine with dynamic path
 const storage = multer.diskStorage({
@@ -51,7 +55,7 @@ async function generateBlurHash(imagePath) {
 
 
 // Route to handle image upload
-router.post('/', uploadPhotos);
+router.post('/',authMiddleware,adminMiddleware, uploadPhotos);
 router.get('/:name', getPhotos);
 
 // Endpoint to serve images

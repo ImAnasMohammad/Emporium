@@ -6,37 +6,11 @@ import ProductImagesForm from '../Forms/ProductImagesForm';
 import ProductVariations from '../Forms/ProductVariations';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ProductCategory from '../Forms/ProductCategory';
 import ProductLabelForm from '../Forms/ProductLabelForm';
+import { useNavigate } from 'react-router-dom';
 const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
-
-
-// import ProductMetadataForm from '../Forms/ProductMetadataForm';
-
-
-// {
-//   "description":"An shirt mobile which is nothing like shirt",
-//   "name":"My product 4",
-//   "brand":"guchi",
-//   "image":"image url link",
-//   "images":["image1 url","image 2 url"],
-//   "category":"6628b62a8bcc41b96b962fa5",
-//   "variatons":[
-//       {
-//           "variation":"S",
-//           "price":240,
-//           "quntity":0,
-//           "discount":0
-//       },
-//       {
-//           "variation":"M",
-//           "price":2400,
-//           "quntity":0,
-//           "discount":0
-//       }
-//   ]
-// }
 
 const ProductCreateEdit = () => {
 
@@ -68,6 +42,7 @@ const ProductCreateEdit = () => {
 
     const [isLoading,setIsLoading] = useState(false);
     const [isCompleted,setIsCompleted] = useState(false);
+
 
     useEffect(()=>{
       async function getProductData(){
@@ -155,6 +130,12 @@ const ProductCreateEdit = () => {
 
 const ProductUploading = ({product,id,setIsLoading,isCompleted,setIsCompleted})=>{
 
+    const navigate = useNavigate();
+
+    const handleReload = ()=>{
+      navigate('/admin/inventory/product');
+    }
+
   const handleClick = async () => {
     setIsLoading(prev=>prev=true);
     const res =  id? await axios.put(`${serverURL}/products/${id}`,product): await axios.post(`${serverURL}/products`,product);
@@ -177,7 +158,14 @@ const ProductUploading = ({product,id,setIsLoading,isCompleted,setIsCompleted})=
                 }
               }>
             </i>
-            <div style={{fontSize:'2rem'}}>Product {`${id?"Updated":"Created"}`}</div>
+            <div style={{fontSize:'2rem'}}>
+                Product {`${id?"Updated":"Created"}`}
+
+                {/* <div style={{marginTop:'20px',display:'flex',justifyContent:'center'}}>
+                    <button className='btn btn-primary' onClick={handleReload}>Add new product</button>
+                </div> */}
+
+            </div>
         </div>:<button className='btn btn-primary' style={{margin:'auto'}} onClick={handleClick}>{`${id?'Update':'create'}`} product</button>
       }
   </div>

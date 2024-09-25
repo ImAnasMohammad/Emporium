@@ -6,11 +6,13 @@ const   SearchLayout = (
   {
     search,
     setSearch,
-    handleSearchClick,
     handleSortClick,
     handleCreateClick,
     btnLabel,
-    children
+    total,
+    current,
+    handlePageChange,
+    children,
   }
 ) => {
   const [show,setShow] = useState(false);
@@ -39,6 +41,7 @@ const   SearchLayout = (
             {btnLabel && <button onClick={handleCreateClick} className='custom-primary-btn add-btn' ><i class="bi bi-plus"></i>{btnLabel}</button>}
         </div>
       </div>
+      
     </>
   )
 }

@@ -32,10 +32,11 @@ import RequestOTP from "./client/pages/RequestOTP";
 import UpdatePassword from "./client/pages/UpdatePassword";
 import PrivateAuthRoute from "./PrivateRoute/PrivateAuthRoute";
 import PublicAuthRoute from "./PrivateRoute/PublicAuthRoute";
-import ContactedUs from "./admin/pages/ContactedUs";
 import Orders from "./admin/pages/Orders";
 import OrderReceived from "./client/pages/Users/OrderReceived";
 import SingleOrder from "./admin/pages/SingleOrder";
+import Settings from "./admin/pages/Settings";
+import ContactedUs from "./admin/pages/ContactedUs";
 
 
 
@@ -81,6 +82,8 @@ function App() {
         <Route path="customers" element={<Customers/>}/>
         <Route path="orders" element={<Orders/>}/>
         <Route path="orders/:id" element={<SingleOrder/>}/>
+        <Route path="settings" element={<Settings/>}/>
+        <Route path="contacted-us" element={<ContactedUs/>}/>
         <Route path="logout" element={<Logout/>}/>
       </Route>
       <Route path="*" element={<NotFound/>}/>

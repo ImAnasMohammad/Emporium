@@ -1,15 +1,18 @@
 const {Product} = require('../models/product.js');
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware.js')
+const adminMiddleware = require('../middlewares/adminMiddleware.js')
+
 
 // all categories routes
-router.post('/',createProduct);
-router.get('/:sort?',getAllProducts);
-router.get('/search/:search',getProductsBySearch);
-router.get('/label/:type/:value/:sort?',getLabeledProducts);
+router.post('/',authMiddleware,adminMiddleware,createProduct);
+router.get('/search/:search/:page?/:limit?',getProductsBySearch);
 router.get('/getProduct/:id',getProductById);
-router.delete('/:id',deleteProduct);
-router.put('/:id',updateProduct);
+router.get('/label/:type/:value/:page?/:limit?/:sort?',getLabeledProducts);
+router.get('/:page?/:sort?',getAllProducts);
+router.delete('/:id',authMiddleware,adminMiddleware,deleteProduct);
+router.put('/:id',authMiddleware,adminMiddleware,updateProduct);
 
 
 function validateProductData(obj){
@@ -49,88 +52,142 @@ function validateProductData(obj){
 
 
 // get all product 
-async function getAllProducts (req,res){
-    try{
-        const reqSort = req.params.sort ?? 0
-        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+async function getAllProducts(req, res) {
+    try {
+        const page = parseInt(req.params.page) || 1;
+        const limit =  10;
+        const reqSort = parseInt(req.params.sort) || 0;
+        const sort = (reqSort >= 0 && reqSort <= 3) ? reqSort : 0;
 
         const sortList = [
-            {'createdAt':1},
-            {'createdAt':-1},
-            {'name':1},
-            {'name':-1},
-        ]
-        const products = await Product.find().populate('category').select('-images').sort(sortList[sort]);
-        if(!products){
-            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:products})
+            {'createdAt': 1},
+            {'createdAt': -1},
+            {'name': 1},
+            {'name': -1},
+        ];
+
+        const totalProducts = await Product.countDocuments();
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find()
+            .populate('category')
+            .select('-images')
+            .sort(sortList[sort])
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        if (!products) {
+            return res.status(500).json({success: false, msg: 'Internal server error'});
+        } else {
+            return res.json({
+                success: true,
+                data: products,
+                currentPage: page,
+                totalPages: totalPages,
+                totalProducts: totalProducts
+            });
         }
-    }catch(err){
-        console.log("error at products - get ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
+    } catch(err) {
+        console.log("error at products - get ", err);
+        return res.status(500).json({success: false, msg: "Internal server error"});
     }
 }
+
 // get labeled product 
-async function getLabeledProducts (req,res){
-    try{
+async function getLabeledProducts(req, res) {
+    try {
         const type = req.params.type ?? '';
         const value = req.params.value ?? '';
-        const reqSort = req.params.sort ?? 0
-        const sort = (reqSort>=0 && reqSort<=3 ) ? reqSort : 0  ;
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+        const reqSort = parseInt(req.params.sort) || 0;
+        const sort = (reqSort >= 0 && reqSort <= 3) ? reqSort : 0;
         
-        if(type === '' || value==='') return res.json({success:false,msg:"Invalid Details"})
+        if (type === '' || value === '') return res.json({success: false, msg: "Invalid Details"});
         
         let query = {};
 
-        if(type === 'label'){
-            query = {labels: { $in: value }}
-        }else if(type === 'category'){
-            query = {category:value}
-        }else{
-            return res.json({success:false,msg:'Invalid details'})
+        if (type === 'label') {
+            query = {labels: { $in: value }};
+        } else if (type === 'category') {
+            query = {category: value};
+        } else {
+            return res.json({success: false, msg: 'Invalid details'});
         }
 
         const sortList = [
-            {'createdAt':1},
-            {'createdAt':-1},
-            {'name':1},
-            {'name':-1}
-        ]
-        const products = await Product.find(query).populate('category').select('-images').sort(sortList[sort]);
-        if(!products){
-            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:products})
+            {'createdAt': 1},
+            {'createdAt': -1},
+            {'name': 1},
+            {'name': -1}
+        ];
+
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find(query)
+            .populate('category')
+            .select('-images')
+            .sort(sortList[sort])
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        if (!products) {
+            return res.status(500).json({success: false, msg: 'Internal server error'});
+        } else {
+            return res.json({
+                success: true,
+                data: products,
+                currentPage: page,
+                totalPages: totalPages,
+                totalProducts: totalProducts
+            });
         }
-    }catch(err){
-        console.log("error at products - get ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
+    } catch(err) {
+        console.log("error at products - get ", err);
+        return res.status(500).json({success: false, msg: "Internal server error"});
     }
 }
 
-async function getProductsBySearch (req,res){
-    try{
-
+async function getProductsBySearch(req, res) {
+    console.log("ok")
+    try {
         const {search} = req.params;
-        if(!search) return res.json({success:false,msg:'Search is empty'});
+        const page = parseInt(req.params.page) || 1;
+        const limit = parseInt(req.params.limit) || 10;
+
+        if (!search) return res.json({success: false, msg: 'Search is empty'});
 
         const regex = new RegExp(search, 'i'); // i means case insensitive
 
-        const products = await Product.find({
+        const query = {
             $or: [
                 { name: regex },
                 { description: regex }
             ]
-        });
-        if(!products){
-            return res.sendStatus(500).json({success:false,msg:'Internal server error'})
-        }else{
-            return res.json({success:true,data:products})
+        };
+
+        const totalProducts = await Product.countDocuments(query);
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find(query)
+            .skip((page - 1) * limit)
+            .limit(limit);
+
+        if (!products) {
+            return res.status(500).json({success: false, msg: 'Internal server error'});
+        } else {
+            return res.json({
+                success: true,
+                data: products,
+                currentPage: page,
+                totalPages: totalPages,
+                totalProducts: totalProducts
+            });
         }
-    }catch(err){
-        console.log("error at products - get ",err);
-        return res.status(500).json({success:false,msg:"Internal server error"})
+    } catch(err) {
+        console.log("error at products - get ", err);
+        return res.status(500).json({success: false, msg: "Internal server error"});
     }
 }
 
@@ -141,6 +198,7 @@ async function getProductById(req,res){
         const {id} = req.params;
         if(!id) return res.json({success:false,msg:'Product ID is empty'});
 
+        console.log('sfsd')
 
         let products = await Product.findById(id).populate('category').select('-_id');
 

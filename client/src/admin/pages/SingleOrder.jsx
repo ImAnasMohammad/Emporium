@@ -106,15 +106,15 @@ const SingleOrder = () => {
                         </div>
                     </div>
                     <div className='single-sub-wrapper'>
-                        <h3>Order Items</h3>
+                        <h3>Order Items details</h3>
                         <table>
                             <thead>
                                 <tr>
                                     <td>Image</td>
                                     <td>name</td>
-                                    <td>Price</td>
-                                    <td>variation</td>
-                                    <td>quantity</td>
+                                    <td>Order Price</td>
+                                    <td>Order variation</td>
+                                    <td>Order quantity</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -132,20 +132,24 @@ const SingleOrder = () => {
 
 
 const SingleRow = ({item})=>{
+    const {price,product,variation,quantity} = item;
     return<tr>
         <td>
-            <LazyLoadImage
-                src={`${serverURL+"/upload/"+item?.product?.image?.name}`}
-                alt={item?.name}
-                blurHash={item?.product?.image?.blurHash}
-                width={100}
-                style={{aspectRatio:'3 / 4',width:'100%',objectFit:'cover'}}
-            />
+            {
+                (product && product?.image?.name && product?.image?.blurHash) ?
+                <LazyLoadImage
+                    src={`${serverURL+"/upload/"+product?.image?.name}`}
+                    alt={item?.name}
+                    blurHash={product?.image?.blurHash}
+                    width={100}
+                    style={{aspectRatio:'3 / 4',width:'100%',objectFit:'cover'}}
+                />:'Looks like product not found'
+            }
         </td>
-        <td>{item?.product?.name}</td>
-        <td>{formatCurrency(item?.price)}</td>
-        <td>{item?.variation}</td>
-        <td>{item?.quantity}</td>
+        <td>{product?.name ? product?.name :"Product not found"}</td>
+        <td>{formatCurrency(price)}</td>
+        <td>{variation}</td>
+        <td>{quantity}</td>
     </tr>
 }
 

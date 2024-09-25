@@ -45,10 +45,11 @@ const SideBar = ({children,page}) => {
 
   return (
 <div className='slide-bar-wrapper'>
-  <header style={{zIndex:'999 !important'}} className={`header ${isOpen && 'body-pd'}`}>
+  <header style={{zIndex:'999 !important',backgroundColor:'#ffff'}} className={`header ${isOpen && 'body-pd'}`}>
     <div className={`header_toggle`}> <i className="bi bi-list" onClick={()=>setIsOpen(prev=>!prev)} /> </div>
     <h3>{page}</h3>
-    <div className="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt="logo" /> </div>
+    <div></div>
+    {/* <div className="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt="logo" /> </div> */}
   </header>
   <div className={`l-navbar ${isOpen && 'show-custom-slide-box-emp'}`}>
     <nav className="nav">

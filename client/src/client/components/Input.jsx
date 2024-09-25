@@ -4,6 +4,7 @@ const Input = (
     {
       label,
       className='',
+      reference,
       ...inputAttributes
       
     }
@@ -12,7 +13,7 @@ const Input = (
     <div className={`custom-input-wrapper ${className}`}>
         <label>
             <div>{label}</div>
-            <input {...inputAttributes}/>
+            <input {...inputAttributes} ref={reference}/>
         </label>
     </div>
   )

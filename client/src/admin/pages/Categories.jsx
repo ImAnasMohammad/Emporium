@@ -9,6 +9,7 @@ import axios from 'axios';
 import CategoryForm from '../Forms/CategoryForm';
 import ConformationModel from '../components/ConformationModel';
 import LazyLoadImage from '../components/LazyLoadImage';
+import Pagination from '../Layouts/Pagination';
 
 
 const serverURL = process.env.REACT_APP_SERVER_BASE_URL;
@@ -47,6 +48,8 @@ const Categories = () => {
   const [search,setSearch] = useState('');
   const [categories,setCategories]= useState([]);
   const [error,setError] = useState(false);
+  const [currentPage,setCurrentPage]=useState(1);
+  const [totalCategories,setTotalCategories]=useState(0);
   const [editCategory,setEditCategory] = useState({
     name:'',
     options:[],
@@ -55,15 +58,16 @@ const Categories = () => {
       blurHash:''
     }
   });
+
   const [editCategoryId,setEditCategoryId] = useState(null);
   const [deleteCategoryId,setDeleteCategoryId] = useState(null);
   const [show,setShow] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
   const [sort,setSort] = useState(0);
 
-  const tableHeadings = ["Categories Name","Image","Options",'Edit','Delete'];
+const tableHeadings = ["Categories Name","Image","Options",'Edit','Delete'];
 
-  const uploadImage = async (categoryTemp)=>{
+const uploadImage = async (categoryTemp)=>{
     try{
       if(categoryTemp?.image?.name instanceof File){
         const formData = new FormData();
@@ -85,14 +89,19 @@ const Categories = () => {
 
     }
 
-  }
-  const getAllCategories = async(url=`${serverURL}/categories/${sort}`)=>{
+}
+  const getAllCategories = async()=>{
     setCategories(categories=>categories=[]);
     setIsLoading(prev=>true);
       try{
-        const res = await axios.get(url);
+        const params = search==='' ?{sort,currentPage}:{sort,currentPage,search};
+
+        const res = await axios.get(`${serverURL}/categories`,{params});
         if(res?.data?.success===true){
           setCategories(res.data.data);
+          if(currentPage===1){
+            setTotalCategories(Math.ceil(res?.data?.total/res?.data?.limit) ?? 0);
+          }
         }else{
           setError(res.data.msg ?? "Something went wrong.");
         }
@@ -101,15 +110,7 @@ const Categories = () => {
       }
       setIsLoading(prev=>false)
   
-    }
-
-  useEffect(()=>{
-    const timeOut = setTimeout(()=>getAllCategories(`${serverURL}/categories/search/${search}`),search ===''?0:100);
-    return ()=>{
-      clearTimeout(timeOut)
-    }
-      
-  },[search])
+}
   
 
 
@@ -182,6 +183,7 @@ const Categories = () => {
 
   const handleSearch = (e)=>{
     setSearch(e.target.value);
+    setCurrentPage(1);
   }
 
   //function for new category
@@ -207,6 +209,9 @@ const Categories = () => {
 
   const handleDeleteCategory = (id)=> setDeleteCategoryId(id);
 
+  useEffect(()=>{
+    getAllCategories();
+  },[search,currentPage])
   
 
   return (
@@ -242,6 +247,11 @@ const Categories = () => {
             {categories.length>0 && !isLoading && <AllRows data={categories} handleEditCategory={handleEditCategory} handleDeleteCategory={handleDeleteCategory}/>}
           </Table>
           <CheckErrorAndData categories={categories} error={error}/>
+          <Pagination 
+            total={totalCategories}
+            current={currentPage}
+            handlePageChange={(ind)=>setCurrentPage(ind)}
+          />
       </Layout>
     </>
   )

@@ -14,30 +14,28 @@ const useAuth =()=> useContext(AuthContext)
 
 const AuthProvider = ({ children }) => {
       
-      const [auth, setAuth] = useState({
-        name:'',
-        token:'', //token for auth
-        isAdmin:false
-      });
+    const [auth, setAuth] = useState({
+    name:'',
+    token:'',
+    isAdmin:false
+    });
 
-      //default axios
-      axios.defaults.headers.common['Authorization'] = auth?.token
+    axios.defaults.headers.common['Authorization'] = auth?.token
 
-      useEffect(()=>{
+    useEffect(()=>{
+    const data = localStorage.getItem('auth');
+    if(data){
+        const {name,token,isAdmin} = JSON.parse(data); 
+        setAuth({...auth,name,token,isAdmin});
+        axios.defaults.headers.common['Authorization'] = token
+    }
+    },[])
 
-            const data = localStorage.getItem('auth');
-            if(data){
-                  const {name,token,isAdmin} = JSON.parse(data);
-                  
-                  setAuth({...auth,name,token,isAdmin})
-            }
-      },[])
-
-      return (
-          <AuthContext.Provider value={[ auth, setAuth ] }>
-            {children}
-          </AuthContext.Provider>
-      );
+    return (
+        <AuthContext.Provider value={[ auth, setAuth ] }>
+        {children}
+        </AuthContext.Provider>
+    );
   };
 
 

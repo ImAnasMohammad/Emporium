@@ -3,10 +3,11 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware.js')
 
+
 // all address routes
 router.post('/',authMiddleware,createAddress);
-router.get('/:id',getAddressByUserId);
-router.delete('/:id',deleteAddress);
+router.get('/:id',authMiddleware,getAddressByUserId);
+// router.delete('/:id',deleteAddress);
 router.put('/:id',authMiddleware,updateAddress);
 
 
